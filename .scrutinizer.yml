@@ -1,0 +1,5 @@
+build:
+    project_setup:
+        before:
+            -
+                command: bin/console server:start

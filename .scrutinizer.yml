@@ -1,4 +1,6 @@
 build:
+    environment:
+        selenium: true
     project_setup:
         before:
             -

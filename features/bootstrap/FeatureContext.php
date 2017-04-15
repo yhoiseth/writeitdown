@@ -30,6 +30,10 @@ class FeatureContext extends MinkContext implements Context
      */
     public function aUserWithPassword($arg1, $arg2)
     {
+        $userManager = $this->getContainer()->get('fos_user.user_manager');
+
+
+
         throw new PendingException();
     }
 

@@ -59,6 +59,8 @@ class PostController extends Controller
     {
         $post = $this->getDoctrine()->getRepository('AppBundle:Post')->find($id);
 
+        $this->denyAccessUnlessGranted('show', $post);
+
         return $this->render('AppBundle:Post:show.html.twig', [
             'post' => $post,
         ]);

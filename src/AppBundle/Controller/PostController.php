@@ -6,6 +6,7 @@ use AppBundle\Entity\Post;
 use AppBundle\Form\PostType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,7 +20,7 @@ class PostController extends Controller
     public function newAction(Request $request)
     {
         $post = new Post();
-        $form = $this->createForm(PostType::class, $post);
+        $form = $this->getForm($post);
 
         $form->handleRequest($request);
 
@@ -46,7 +47,7 @@ class PostController extends Controller
         $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
         $post = $postRepository->find($id);
 
-        $form = $this->createForm(PostType::class, $post);
+        $form = $this->getForm($post);
 
         $form->handleRequest($request);
 
@@ -60,5 +61,16 @@ class PostController extends Controller
         return $this->render('AppBundle:Post:edit.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param Post $post
+     * @return Form
+     */
+    private function getForm($post): Form
+    {
+        $form = $this->createForm(PostType::class, $post);
+
+        return $form;
     }
 }

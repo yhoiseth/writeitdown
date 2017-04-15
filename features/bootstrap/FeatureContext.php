@@ -1,6 +1,7 @@
 <?php
 
 use AppBundle\Entity\Post;
+use AppBundle\Entity\PostRole;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
@@ -84,10 +85,7 @@ class FeatureContext extends MinkContext implements Context
     public function iHaveAlreadyLoggedIn()
     {
         $this->aUserWithPassword('marcus', 'aurelius');
-        $this->visit("/login");
-        $this->fillField('Username', 'marcus');
-        $this->fillField('Password', 'aurelius');
-        $this->pressButton('Log in');
+        $this->login('marcus', 'aurelius');
     }
 
     /**
@@ -219,6 +217,37 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
+     * @Given I am logged in as :username with password :password
+     * @param string $username
+     * @param string $password
+     */
+    public function iAmLoggedInAsWithPassword(string $username, string $password)
+    {
+        $this->login($username, $password);
+    }
+
+    /**
+     * @Given a post which belongs to :username
+     */
+    public function aPostWhichBelongsTo($username)
+    {
+        $entityManager = $this->getEntityManager();
+        $userManager = $this->getContainer()->get('fos_user.user_manager');
+
+        $post = new Post();
+        $post->setTitle('Belongs to Alice');
+        $entityManager->persist($post);
+
+        $postRole = new PostRole();
+        $postRole->setPost($post);
+        $postRole->setUser($userManager->findUserByUsername($username));
+        $postRole->setType(PostRole::TYPE_OWNER);
+        $entityManager->persist($postRole);
+        $entityManager->flush();
+        $this->addScenarioArgument('post', $post);
+    }
+
+    /**
      * @return array
      */
     private function getScenarioArguments(): array
@@ -270,5 +299,17 @@ class FeatureContext extends MinkContext implements Context
     private function getEntityManager()
     {
         return $this->getDoctrine()->getManager();
+    }
+
+    /**
+     * @param string $username
+     * @param string $password
+     */
+    private function login(string $username, string $password): void
+    {
+        $this->visit("/login");
+        $this->fillField('Username', $username);
+        $this->fillField('Password', $password);
+        $this->pressButton('Log in');
     }
 }

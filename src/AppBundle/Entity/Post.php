@@ -2,7 +2,9 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use AppBundle\Entity\PostRole;
 
 /**
  * Post
@@ -35,6 +37,17 @@ class Post
      */
     private $body;
 
+    /**
+     * @var ArrayCollection|PostRole[]
+     *
+     * @ORM\OneToMany(targetEntity="PostRole", mappedBy="post")
+     */
+    private $roles;
+
+    public function __construct()
+    {
+        $this->setRoles(new ArrayCollection());
+    }
 
     /**
      * Get id
@@ -71,9 +84,9 @@ class Post
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getBody(): string
+    public function getBody()
     {
         return $this->body;
     }
@@ -84,6 +97,22 @@ class Post
     public function setBody(string $body)
     {
         $this->body = $body;
+    }
+
+    /**
+     * @return ArrayCollection|PostRole[]
+     */
+    public function getRoles(): ArrayCollection
+    {
+        return $this->roles;
+    }
+
+    /**
+     * @param ArrayCollection|PostRole[] $roles
+     */
+    public function setRoles(ArrayCollection $roles)
+    {
+        $this->roles = $roles;
     }
 }
 

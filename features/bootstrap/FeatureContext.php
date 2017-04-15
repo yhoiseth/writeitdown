@@ -113,7 +113,41 @@ class FeatureContext extends MinkContext implements Context
         $entityManager->persist($post);
         $entityManager->flush();
 
-        $this->addScenarioArgument('postTitle', $title);
+        $this->setScenarioArgument('post', $post);
+    }
+
+    /**
+     * @Given the post belongs to :username
+     * @param string $username
+     */
+    public function thePostBelongsTo(string $username)
+    {
+        $entityManager = $this->getEntityManager();
+        $post = $this->getScenarioArgument('post');
+
+        /** @var \AppBundle\Repository\PostRepository $postRepository */
+        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
+        $userManager = $this->getContainer()->get('fos_user.user_manager');
+
+        $postRepository->addRole(PostRole::TYPE_OWNER, $post, $userManager->findUserByUsername($username));
+        $this->setScenarioArgument('post', $post);
+    }
+
+    /**
+     * @Given the post has body :body
+     * @param string $body
+     */
+    public function thePostHasBody(string $body)
+    {
+        $entityManager = $this->getEntityManager();
+
+        /** @var Post $post */
+        $post = $this->getScenarioArgument('post');
+        $post->setBody($body);
+        $entityManager->persist($post);
+        $entityManager->flush();
+
+        $this->setScenarioArgument('post', $post);
     }
 
     /**
@@ -167,7 +201,7 @@ class FeatureContext extends MinkContext implements Context
 
         $entityManager->flush();
 
-        $this->addScenarioArgument('posts', $posts);
+        $this->setScenarioArgument('posts', $posts);
     }
 
     /**
@@ -186,9 +220,10 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @Given a post with markdown-formatted body
+     * @Given a post with markdown-formatted body belonging to :username
+     * @param string $username
      */
-    public function aPostWithMarkdownFormattedBody()
+    public function aPostWithMarkdownFormattedBodyBelongingTo(string $username)
     {
         $post = new Post();
         $post->setTitle('Post with markdown-formatted content');
@@ -196,7 +231,7 @@ class FeatureContext extends MinkContext implements Context
         $entityManager = $this->getEntityManager();
         $entityManager->persist($post);
         $entityManager->flush();
-        $this->addScenarioArgument('post', $post);
+        $this->setScenarioArgument('post', $post);
     }
 
     /**
@@ -244,7 +279,7 @@ class FeatureContext extends MinkContext implements Context
         $postRole->setType(PostRole::TYPE_OWNER);
         $entityManager->persist($postRole);
         $entityManager->flush();
-        $this->addScenarioArgument('post', $post);
+        $this->setScenarioArgument('post', $post);
     }
 
     /**
@@ -267,7 +302,7 @@ class FeatureContext extends MinkContext implements Context
      * @param string $key
      * @param mixed $value
      */
-    private function addScenarioArgument(string $key, $value)
+    private function setScenarioArgument(string $key, $value)
     {
         $scenarioArguments = $this->getScenarioArguments();
         $scenarioArguments[$key] = $value;

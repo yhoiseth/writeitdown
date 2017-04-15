@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\PostRole;
 
@@ -100,9 +101,9 @@ class Post
     }
 
     /**
-     * @return ArrayCollection|PostRole[]
+     * @return Collection|PostRole[]
      */
-    public function getRoles(): ArrayCollection
+    public function getRoles(): Collection
     {
         return $this->roles;
     }

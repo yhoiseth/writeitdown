@@ -3,7 +3,6 @@ Feature: Edit post
   As a logged-in web user
   I need to be able to edit posts
 
-  @watch
   Scenario: Post exists
     Given a post with title "My old post"
     And I am on the edit page for "My old post"

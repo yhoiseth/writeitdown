@@ -33,6 +33,23 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
+     * @BeforeScenario
+     */
+    public function prepareDatabase()
+    {
+        $commands = [
+            'doctrine:database:create',
+            'doctrine:database:drop --force',
+            'doctrine:database:create',
+            'doctrine:migrations:migrate --no-interaction',
+        ];
+
+        foreach ($commands as $command) {
+            exec('bin/console ' . $command . ' --env=test');
+        }
+    }
+
+    /**
      * @Given a user :username with password :password
      */
     public function aUserWithPassword($username, $password)
@@ -45,7 +62,7 @@ class FeatureContext extends MinkContext implements Context
         $user->setEmail($username . '@example.com');
         $user->setEnabled(true);
 
-        $entityManager = $this->getContainer()->get('doctrine')->getManager();
+        $entityManager = $this->getEntityManager();
 
         $entityManager->persist($user);
         $entityManager->flush();
@@ -78,7 +95,7 @@ class FeatureContext extends MinkContext implements Context
      */
     public function myPostShouldBeSaved()
     {
-        $postRepository = $this->getContainer()->get('doctrine')->getRepository('AppBundle:Post');
+        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
 
         $post = $postRepository->findOneBy([
             'title' => 'My first post',
@@ -94,7 +111,7 @@ class FeatureContext extends MinkContext implements Context
     {
         $post = new Post();
         $post->setTitle($title);
-        $entityManager = $this->getContainer()->get('doctrine')->getManager();
+        $entityManager = $this->getEntityManager();
         $entityManager->persist($post);
         $entityManager->flush();
 
@@ -106,9 +123,7 @@ class FeatureContext extends MinkContext implements Context
      */
     public function iAmOnTheEditPageFor($postTitle)
     {
-        $post = $this
-            ->getContainer()
-            ->get('doctrine')
+        $post = $this->getDoctrine()
             ->getRepository('AppBundle:Post')
             ->findOneBy([
                 'title' => $postTitle,
@@ -124,7 +139,7 @@ class FeatureContext extends MinkContext implements Context
      */
     public function theTitleIsUpdatedTo($editedTitle)
     {
-        $postRepository = $this->getContainer()->get('doctrine')->getRepository('AppBundle:Post');
+        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
 
         Assert::assertNull($postRepository->findOneBy([
             'title' => $this->getScenarioArgument('postTitle'),
@@ -137,28 +152,11 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @BeforeScenario
-     */
-    public function prepareDatabase()
-    {
-        $commands = [
-            'doctrine:database:create',
-            'doctrine:database:drop --force',
-            'doctrine:database:create',
-            'doctrine:migrations:migrate --no-interaction',
-        ];
-
-        foreach ($commands as $command) {
-            exec('bin/console ' . $command . ' --env=test');
-        }
-    }
-
-    /**
      * @Given I have :count posts
      */
     public function iHavePosts(string $count)
     {
-        $entityManager = $this->getContainer()->get('doctrine')->getManager();
+        $entityManager = $this->getEntityManager();
 
         $posts = [];
 
@@ -187,6 +185,37 @@ class FeatureContext extends MinkContext implements Context
         foreach ($posts as $post) {
             $this->assertPageContainsText($post->getTitle());
         }
+    }
+
+    /**
+     * @Given a post with markdown-formatted body
+     */
+    public function aPostWithMarkdownFormattedBody()
+    {
+        $post = new Post();
+        $post->setTitle('Post with markdown-formatted content');
+        $post->setBody('# Heading 1');
+        $entityManager = $this->getEntityManager();
+        $entityManager->persist($post);
+        $entityManager->flush();
+        $this->addScenarioArgument('post', $post);
+    }
+
+    /**
+     * @Given I am viewing the given post
+     */
+    public function iAmViewingTheGivenPost()
+    {
+        $this->visit('/' . $this->getScenarioArgument('post')->getId());
+    }
+
+    /**
+     * @Then I should see the content correctly formatted as HTML
+     */
+    public function iShouldSeeTheContentCorrectlyFormattedAsHtml()
+    {
+        $this->assertResponseStatus(200);
+        $this->assertElementContainsText('h1', 'Heading 1');
     }
 
     /**
@@ -225,5 +254,21 @@ class FeatureContext extends MinkContext implements Context
         $value = $this->getScenarioArguments()[$key];
 
         return $value;
+    }
+
+    /**
+     * @return \Doctrine\Bundle\DoctrineBundle\Registry|object
+     */
+    private function getDoctrine()
+    {
+        return $this->getContainer()->get('doctrine');
+    }
+
+    /**
+     * @return \Doctrine\Common\Persistence\ObjectManager|object
+     */
+    private function getEntityManager()
+    {
+        return $this->getDoctrine()->getManager();
     }
 }

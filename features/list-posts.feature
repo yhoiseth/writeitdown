@@ -3,7 +3,6 @@ Feature: List posts
   As a logged-in web user
   I need to see a list of my posts
 
-  @watch
   Scenario: A few posts
     Given I am on the homepage
     And I have "3" posts

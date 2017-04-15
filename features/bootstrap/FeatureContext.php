@@ -6,6 +6,7 @@ use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
+use PHPUnit\Framework\Assert;
 
 /**
  * Defines application features from the specific context.
@@ -77,9 +78,7 @@ class FeatureContext extends MinkContext implements Context
             'title' => 'My first post',
         ]);
 
-        
-
-        throw new PendingException();
+        Assert::assertNotNull($post, "Post wasn't created like expected.");
     }
 
     /**

@@ -61,6 +61,6 @@ class FeatureContext extends MinkContext implements Context
         exec('bin/console doctrine:database:create --env=test');
         exec('bin/console doctrine:database:drop --env=test --force');
         exec('bin/console doctrine:database:create --env=test');
-        exec('bin/console doctrine:schema:update --env=test --force');
+        exec('bin/console doctrine:migrations:migrate --env=test --no-interaction');
     }
 }

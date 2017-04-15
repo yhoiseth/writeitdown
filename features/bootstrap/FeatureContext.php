@@ -58,7 +58,9 @@ class FeatureContext extends MinkContext implements Context
      */
     public function clearData()
     {
-        $entityManager = $this->getContainer()->get('doctrine')->getManager();
-        $entityManager->createQuery('DELETE FROM AppBundle:User')->execute();
+        exec('bin/console doctrine:database:create --env=test');
+        exec('bin/console doctrine:database:drop --env=test --force');
+        exec('bin/console doctrine:database:create --env=test');
+        exec('bin/console doctrine:schema:update --env=test --force');
     }
 }

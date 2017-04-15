@@ -154,6 +154,42 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
+     * @Given I have :count posts
+     */
+    public function iHavePosts(string $count)
+    {
+        $entityManager = $this->getContainer()->get('doctrine')->getManager();
+
+        $posts = [];
+
+        for ($index = 0; $index < $count;  $index++) {
+            $post = new Post();
+            $post->setTitle('Title for post ' . $index);
+            $entityManager->persist($post);
+            $posts[] = $post;
+        }
+
+        $entityManager->flush();
+
+        $this->addScenarioArgument('posts', $posts);
+    }
+
+    /**
+     * @Then I should see a list with these posts
+     */
+    public function iShouldSeeAListWithThesePosts()
+    {
+        $this->visit('');
+
+        /** @var Post[] $posts */
+        $posts = $this->getScenarioArgument('posts');
+
+        foreach ($posts as $post) {
+            $this->assertPageContainsText($post->getTitle());
+        }
+    }
+
+    /**
      * @return array
      */
     private function getScenarioArguments(): array
@@ -189,21 +225,5 @@ class FeatureContext extends MinkContext implements Context
         $value = $this->getScenarioArguments()[$key];
 
         return $value;
-    }
-
-    /**
-     * @Given I have :arg1 posts
-     */
-    public function iHavePosts($arg1)
-    {
-        throw new PendingException();
-    }
-
-    /**
-     * @Then I should see a list with these posts
-     */
-    public function iShouldSeeAListWithThesePosts()
-    {
-        throw new PendingException();
     }
 }

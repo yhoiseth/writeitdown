@@ -41,7 +41,8 @@
         "behat/symfony2-extension": "^2.1",
         "phpunit/phpunit": "5.*",
         "sensio/generator-bundle": "^3.0",
-        "symfony/phpunit-bridge": "^3.0"
+        "symfony/phpunit-bridge": "^3.0",
+        "symfony/var-dumper": "^3.2"
     },
     "scripts": {
         "symfony-scripts": [

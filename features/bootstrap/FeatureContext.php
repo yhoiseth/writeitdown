@@ -190,4 +190,20 @@ class FeatureContext extends MinkContext implements Context
 
         return $value;
     }
+
+    /**
+     * @Given I have :arg1 posts
+     */
+    public function iHavePosts($arg1)
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then I should see a list with these posts
+     */
+    public function iShouldSeeAListWithThesePosts()
+    {
+        throw new PendingException();
+    }
 }

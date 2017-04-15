@@ -71,6 +71,14 @@ class FeatureContext extends MinkContext implements Context
      */
     public function myPostShouldBeSaved()
     {
+        $postRepository = $this->getContainer()->get('doctrine')->getRepository('AppBundle:Post');
+
+        $post = $postRepository->findOneBy([
+            'title' => 'My first post',
+        ]);
+
+        
+
         throw new PendingException();
     }
 

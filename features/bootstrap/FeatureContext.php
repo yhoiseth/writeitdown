@@ -6,6 +6,7 @@ use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
+use PHPUnit\Framework\Assert;
 
 /**
  * Defines application features from the specific context.
@@ -51,6 +52,33 @@ class FeatureContext extends MinkContext implements Context
     {
         $this->visit('/profile');
         $this->assertPageContainsText('Logged in as marcus');
+    }
+
+
+    /**
+     * @Given I have already logged in
+     */
+    public function iHaveAlreadyLoggedIn()
+    {
+        $this->aUserWithPassword('marcus', 'aurelius');
+        $this->visit("/login");
+        $this->fillField('Username', 'marcus');
+        $this->fillField('Password', 'aurelius');
+        $this->pressButton('Log in');
+    }
+
+    /**
+     * @Then my post should be saved
+     */
+    public function myPostShouldBeSaved()
+    {
+        $postRepository = $this->getContainer()->get('doctrine')->getRepository('AppBundle:Post');
+
+        $post = $postRepository->findOneBy([
+            'title' => 'My first post',
+        ]);
+
+        Assert::assertNotNull($post, "Post wasn't created like expected.");
     }
 
     /**

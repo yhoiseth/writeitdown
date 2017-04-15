@@ -82,6 +82,30 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
+     * @Given a post with title :arg1
+     */
+    public function aPostWithTitle($arg1)
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Given I am on the edit page for :arg1
+     */
+    public function iAmOnTheEditPageFor($arg1)
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then the title is updated
+     */
+    public function theTitleIsUpdated()
+    {
+        throw new PendingException();
+    }
+
+    /**
      * @BeforeScenario
      */
     public function prepareDatabase()

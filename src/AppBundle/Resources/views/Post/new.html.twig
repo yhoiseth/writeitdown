@@ -4,11 +4,7 @@
 
 {% block body %}
 <h1>Welcome to the Post:new page</h1>
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <input
-            type="submit"
-            value="Save"
-    >
-    {{ form_end(form) }}
+
+    {% include 'AppBundle:Post:form.html.twig' %}
+
 {% endblock %}

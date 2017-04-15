@@ -1,5 +1,6 @@
 <?php
 
+use AppBundle\Entity\Post;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
@@ -13,6 +14,11 @@ use PHPUnit\Framework\Assert;
  */
 class FeatureContext extends MinkContext implements Context
 {
+    /**
+     * @var array $scenarioArguments
+     */
+    private $scenarioArguments = [];
+
     use KernelDictionary;
 
     /**
@@ -82,6 +88,55 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
+     * @Given a post with title :title
+     */
+    public function aPostWithTitle($title)
+    {
+        $post = new Post();
+        $post->setTitle($title);
+        $entityManager = $this->getContainer()->get('doctrine')->getManager();
+        $entityManager->persist($post);
+        $entityManager->flush();
+
+        $this->addScenarioArgument('postTitle', $title);
+    }
+
+    /**
+     * @Given I am on the edit page for :postTitle
+     */
+    public function iAmOnTheEditPageFor($postTitle)
+    {
+        $post = $this
+            ->getContainer()
+            ->get('doctrine')
+            ->getRepository('AppBundle:Post')
+            ->findOneBy([
+                'title' => $postTitle,
+        ]);
+
+        $this->visit('/edit/' . $post->getId());
+
+        $this->assertResponseStatus(200);
+    }
+
+    /**
+     * @Then the title is updated to :editedTitle
+     */
+    public function theTitleIsUpdatedTo($editedTitle)
+    {
+        $postRepository = $this->getContainer()->get('doctrine')->getRepository('AppBundle:Post');
+
+        Assert::assertNull($postRepository->findOneBy([
+            'title' => $this->getScenarioArgument('postTitle'),
+        ]));
+
+        Assert::assertInstanceOf('\AppBundle\Entity\Post', $postRepository->findOneBy([
+            'title' => $editedTitle,
+        ]));
+
+    }
+
+    /**
      * @BeforeScenario
      */
     public function prepareDatabase()
@@ -96,5 +151,43 @@ class FeatureContext extends MinkContext implements Context
         foreach ($commands as $command) {
             exec('bin/console ' . $command . ' --env=test');
         }
+    }
+
+    /**
+     * @return array
+     */
+    private function getScenarioArguments(): array
+    {
+        return $this->scenarioArguments;
+    }
+
+    /**
+     * @param array $scenarioArguments
+     */
+    private function setScenarioArguments(array $scenarioArguments)
+    {
+        $this->scenarioArguments = $scenarioArguments;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     */
+    private function addScenarioArgument(string $key, $value)
+    {
+        $scenarioArguments = $this->getScenarioArguments();
+        $scenarioArguments[$key] = $value;
+        $this->setScenarioArguments($scenarioArguments);
+    }
+
+    /**
+     * @param string $key
+     * @return mixed $value
+     */
+    private function getScenarioArgument(string $key)
+    {
+        $value = $this->getScenarioArguments()[$key];
+
+        return $value;
     }
 }

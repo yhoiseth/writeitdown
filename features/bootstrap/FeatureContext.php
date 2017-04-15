@@ -53,6 +53,27 @@ class FeatureContext extends MinkContext implements Context
         $this->assertPageContainsText('Logged in as marcus');
     }
 
+
+    /**
+     * @Given I have already logged in
+     */
+    public function iHaveAlreadyLoggedIn()
+    {
+        $this->aUserWithPassword('marcus', 'aurelius');
+        $this->visit("/login");
+        $this->fillField('Username', 'marcus');
+        $this->fillField('Password', 'aurelius');
+        $this->pressButton('Log in');
+    }
+
+    /**
+     * @Then my post should be saved
+     */
+    public function myPostShouldBeSaved()
+    {
+        throw new PendingException();
+    }
+
     /**
      * @BeforeScenario
      */

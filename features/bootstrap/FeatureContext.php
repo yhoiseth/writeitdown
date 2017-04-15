@@ -56,11 +56,17 @@ class FeatureContext extends MinkContext implements Context
     /**
      * @BeforeScenario
      */
-    public function clearData()
+    public function prepareDatabase()
     {
-        exec('bin/console doctrine:database:create --env=test');
-        exec('bin/console doctrine:database:drop --env=test --force');
-        exec('bin/console doctrine:database:create --env=test');
-        exec('bin/console doctrine:migrations:migrate --env=test --no-interaction');
+        $commands = [
+            'doctrine:database:create',
+            'doctrine:database:drop --force',
+            'doctrine:database:create',
+            'doctrine:migrations:migrate --no-interaction',
+        ];
+
+        foreach ($commands as $command) {
+            exec('bin/console ' . $command . ' --env=test');
+        }
     }
 }

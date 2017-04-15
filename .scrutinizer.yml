@@ -1,0 +1,7 @@
+build:
+    environment:
+        selenium: true
+    project_setup:
+        before:
+            -
+                command: bin/console server:start

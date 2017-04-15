@@ -3,5 +3,6 @@
 ## Development
 
 1. Clone the repository.
-2. Start the development server: `bin/console server:start`
-
+2. Install dependencies: `composer install`
+3. Start the development server: `bin/console server:start`
+4. Run Behat tests: `vendor/bin/behat`

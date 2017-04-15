@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 class PostController extends Controller
 {
     /**
-     * @Route("/new")
+     * @Route("/new", name="post_new")
      * @param Request $request
      * @return Response
      */
@@ -31,6 +31,33 @@ class PostController extends Controller
         }
 
         return $this->render('AppBundle:Post:new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/edit/{id}", name="post_edit")
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    public function editAction(Request $request, string $id)
+    {
+        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
+        $post = $postRepository->find($id);
+
+        $form = $this->createForm(PostType::class, $post);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $post = $form->getData();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($post);
+            $entityManager->flush();
+        }
+
+        return $this->render('AppBundle:Post:edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }

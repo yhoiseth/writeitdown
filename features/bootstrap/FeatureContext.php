@@ -1,5 +1,6 @@
 <?php
 
+use AppBundle\Entity\Post;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
@@ -13,6 +14,11 @@ use PHPUnit\Framework\Assert;
  */
 class FeatureContext extends MinkContext implements Context
 {
+    /**
+     * @var array $scenarioArguments
+     */
+    private $scenarioArguments = [];
+
     use KernelDictionary;
 
     /**
@@ -82,27 +88,52 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @Given a post with title :arg1
+     * @Given a post with title :title
      */
-    public function aPostWithTitle($arg1)
+    public function aPostWithTitle($title)
     {
-        throw new PendingException();
+        $post = new Post();
+        $post->setTitle($title);
+        $entityManager = $this->getContainer()->get('doctrine')->getManager();
+        $entityManager->persist($post);
+        $entityManager->flush();
+
+        $this->addScenarioArgument('postTitle', $title);
     }
 
     /**
-     * @Given I am on the edit page for :arg1
+     * @Given I am on the edit page for :postTitle
      */
-    public function iAmOnTheEditPageFor($arg1)
+    public function iAmOnTheEditPageFor($postTitle)
     {
-        throw new PendingException();
+        $post = $this
+            ->getContainer()
+            ->get('doctrine')
+            ->getRepository('AppBundle:Post')
+            ->findOneBy([
+                'title' => $postTitle,
+        ]);
+
+        $this->visit('/edit/' . $post->getId());
+
+        $this->assertResponseStatus(200);
     }
 
     /**
-     * @Then the title is updated
+     * @Then the title is updated to :editedTitle
      */
-    public function theTitleIsUpdated()
+    public function theTitleIsUpdatedTo($editedTitle)
     {
-        throw new PendingException();
+        $postRepository = $this->getContainer()->get('doctrine')->getRepository('AppBundle:Post');
+
+        Assert::assertNull($postRepository->findOneBy([
+            'title' => $this->getScenarioArgument('postTitle'),
+        ]));
+
+        Assert::assertInstanceOf('\AppBundle\Entity\Post', $postRepository->findOneBy([
+            'title' => $editedTitle,
+        ]));
+
     }
 
     /**
@@ -120,5 +151,43 @@ class FeatureContext extends MinkContext implements Context
         foreach ($commands as $command) {
             exec('bin/console ' . $command . ' --env=test');
         }
+    }
+
+    /**
+     * @return array
+     */
+    private function getScenarioArguments(): array
+    {
+        return $this->scenarioArguments;
+    }
+
+    /**
+     * @param array $scenarioArguments
+     */
+    private function setScenarioArguments(array $scenarioArguments)
+    {
+        $this->scenarioArguments = $scenarioArguments;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     */
+    private function addScenarioArgument(string $key, $value)
+    {
+        $scenarioArguments = $this->getScenarioArguments();
+        $scenarioArguments[$key] = $value;
+        $this->setScenarioArguments($scenarioArguments);
+    }
+
+    /**
+     * @param string $key
+     * @return mixed $value
+     */
+    private function getScenarioArgument(string $key)
+    {
+        $value = $this->getScenarioArguments()[$key];
+
+        return $value;
     }
 }

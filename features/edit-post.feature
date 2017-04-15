@@ -8,4 +8,5 @@ Feature: Edit post
     Given a post with title "My old post"
     And I am on the edit page for "My old post"
     When I fill in "Title" with "My old post has now been edited"
-    Then the title is updated
+    And I press "Save"
+    Then the title is updated to "My old post has now been edited"

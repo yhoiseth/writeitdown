@@ -26,15 +26,22 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @Given a user :arg1 with password :arg2
+     * @Given a user :username with password :password
      */
-    public function aUserWithPassword($arg1, $arg2)
+    public function aUserWithPassword($username, $password)
     {
         $userManager = $this->getContainer()->get('fos_user.user_manager');
 
+        $user = $userManager->createUser();
+        $user->setUsername($username);
+        $user->setPlainPassword($password);
+        $user->setEmail($username . '@example.com');
+        $user->setEnabled(true);
 
+        $entityManager = $this->getContainer()->get('doctrine')->getManager();
 
-        throw new PendingException();
+        $entityManager->persist($user);
+        $entityManager->flush();
     }
 
     /**
@@ -42,6 +49,16 @@ class FeatureContext extends MinkContext implements Context
      */
     public function iAmLoggedIn()
     {
-        throw new PendingException();
+        $this->visit('/profile');
+        $this->assertPageContainsText('Logged in as marcus');
+    }
+
+    /**
+     * @BeforeScenario
+     */
+    public function clearData()
+    {
+        $entityManager = $this->getContainer()->get('doctrine')->getManager();
+        $entityManager->createQuery('DELETE FROM AppBundle:User')->execute();
     }
 }

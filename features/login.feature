@@ -8,5 +8,5 @@ Feature: Login
     And I am on "/login"
     When I fill in "Username" with "marcus"
     And I fill in "Password" with "aurelius"
-    And I press "Login"
+    And I press "Log in"
     Then I am logged in

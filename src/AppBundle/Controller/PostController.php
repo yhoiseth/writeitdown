@@ -50,6 +50,21 @@ class PostController extends Controller
     }
 
     /**
+     * @Route("/{id}", name="post_show")
+     * @param Request $request
+     * @param string $id
+     * @return Response
+     */
+    public function showAction(Request $request, string $id)
+    {
+        $post = $this->getDoctrine()->getRepository('AppBundle:Post')->find($id);
+
+        return $this->render('AppBundle:Post:show.html.twig', [
+            'post' => $post,
+        ]);
+    }
+
+    /**
      * @param Post $post
      * @return Form
      */

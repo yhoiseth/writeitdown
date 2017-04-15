@@ -22,14 +22,7 @@ class PostController extends Controller
         $post = new Post();
         $form = $this->getForm($post);
 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $post = $form->getData();
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($post);
-            $entityManager->flush();
-        }
+        $this->handlePostFormRequest($request, $form);
 
         return $this->render('AppBundle:Post:new.html.twig', [
             'form' => $form->createView(),
@@ -49,14 +42,7 @@ class PostController extends Controller
 
         $form = $this->getForm($post);
 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $post = $form->getData();
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($post);
-            $entityManager->flush();
-        }
+        $this->handlePostFormRequest($request, $form);
 
         return $this->render('AppBundle:Post:edit.html.twig', [
             'form' => $form->createView(),
@@ -72,5 +58,21 @@ class PostController extends Controller
         $form = $this->createForm(PostType::class, $post);
 
         return $form;
+    }
+
+    /**
+     * @param Request $request
+     * @param Form $form
+     */
+    private function handlePostFormRequest(Request $request, Form $form): void
+    {
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $post = $form->getData();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($post);
+            $entityManager->flush();
+        }
     }
 }

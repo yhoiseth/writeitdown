@@ -56,7 +56,8 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
         ],
         "post-install-cmd": [
-            "@symfony-scripts"
+            "@symfony-scripts",
+            "bin/console doctrine:migrations:migrate --no-interaction"
         ],
         "post-update-cmd": [
             "@symfony-scripts"

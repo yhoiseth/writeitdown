@@ -6,10 +6,8 @@ Feature: List posts
 
   Background:
     Given a user "user"
-    And a post with title "User's first post"
-    And the post belongs to "user"
-    And a post with title "User's second post"
-    And the post belongs to "user"
+    And that "user" has a post with title "User's first post"
+    And that "user" has a post with title "User's second post"
 
   Scenario: Not logged in
     Given I am on the homepage
@@ -19,5 +17,5 @@ Feature: List posts
   Scenario: Logged in
     Given I am on the homepage
     And I am logged in as "user"
-#    Then I should see "User's first post" The posts are visible, but somehow they aren't seen by the test
-#    And I should see "User's second post"
+    Then I should see "User's first post"
+    And I should see "User's second post"

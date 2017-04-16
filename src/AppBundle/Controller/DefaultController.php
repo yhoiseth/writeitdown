@@ -53,7 +53,10 @@ class DefaultController extends Controller
             $postRepository = $doctrine->getRepository('AppBundle:Post');
             $postRepository->addRole(PostRole::TYPE_OWNER, $post, $this->getUser());
 
-            return $this->redirectToRoute('post_edit', ['slug' => $post->getSlug()]);
+            return $this->redirectToRoute('post_edit', [
+                'username' => $this->getUser()->getUsername(),
+                'slug' => $post->getSlug(),
+            ]);
         }
 
         return $this->render('AppBundle:Post:new.html.twig', [
@@ -62,12 +65,13 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/edit/{slug}", name="post_edit")
+     * @Route("/{username}/{slug}/edit", name="post_edit")
      * @param Request $request
+     * @param string $username
      * @param string $slug
      * @return Response
      */
-    public function editAction(Request $request, string $slug)
+    public function editAction(Request $request, string $username, string $slug)
     {
         $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
         $post = $postRepository->findOneBy(['slug' => $slug]);

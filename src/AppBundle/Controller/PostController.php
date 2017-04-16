@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Post;
+use AppBundle\Entity\PostRole;
 use AppBundle\Form\PostType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -20,9 +21,26 @@ class PostController extends Controller
     public function newAction(Request $request)
     {
         $post = new Post();
+
+        $this->denyAccessUnlessGranted('new', $post);
+
         $form = $this->getForm($post);
 
-        $this->handlePostFormRequest($request, $form);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $post = $form->getData();
+
+            $doctrine = $this->getDoctrine();
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($post);
+            $entityManager->flush();
+
+            $postRepository = $doctrine->getRepository('AppBundle:Post');
+            $postRepository->addRole(PostRole::TYPE_OWNER, $post, $this->getUser());
+
+            return $this->redirectToRoute('post_edit', ['id' => $post->getId()]);
+        }
 
         return $this->render('AppBundle:Post:new.html.twig', [
             'form' => $form->createView(),
@@ -39,6 +57,8 @@ class PostController extends Controller
     {
         $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
         $post = $postRepository->find($id);
+
+        $this->denyAccessUnlessGranted('edit', $post);
 
         $form = $this->getForm($post);
 
@@ -59,6 +79,8 @@ class PostController extends Controller
     {
         $post = $this->getDoctrine()->getRepository('AppBundle:Post')->find($id);
 
+        $this->denyAccessUnlessGranted('show', $post);
+
         return $this->render('AppBundle:Post:show.html.twig', [
             'post' => $post,
         ]);
@@ -78,6 +100,7 @@ class PostController extends Controller
     /**
      * @param Request $request
      * @param Form $form
+     * @return void
      */
     private function handlePostFormRequest(Request $request, Form $form): void
     {

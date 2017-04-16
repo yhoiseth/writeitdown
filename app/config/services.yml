@@ -9,3 +9,9 @@ services:
         tags:
             - { name: security.voter }
         public: false
+
+    app.post_service:
+        class: AppBundle\Service\PostService
+        arguments:
+            - "@doctrine.orm.default_entity_manager"
+            - "@slugify"

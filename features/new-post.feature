@@ -1,4 +1,3 @@
-@watch
 Feature: New post
   In order to remember my thoughts
   As an authenticated web user

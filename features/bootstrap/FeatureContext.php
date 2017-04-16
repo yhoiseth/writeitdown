@@ -306,6 +306,24 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
+     * @Given that :username has a post with title :title
+     * @param string $username
+     * @param string $title
+     */
+    public function thatHasAPostWithTitle(string $username, string $title)
+    {
+        $postService = $this->getContainer()->get('app.post_service');
+        $userManager = $this->getContainer()->get('fos_user.user_manager');
+
+        $post = $postService->createPost(
+            $userManager->findUserByUsername($username),
+            $title
+        );
+
+        $this->setScenarioArgument('post', $post);
+    }
+
+    /**
      * @return array
      */
     private function getScenarioArguments(): array

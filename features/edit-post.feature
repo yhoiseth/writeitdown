@@ -14,6 +14,7 @@ Feature: Edit post
     Given I am logged in as "editor" with password "editor"
     And I am on the edit page for "Editor's existing post"
     When I fill in "Title" with "My old post has now been edited"
+    And I fill in "Body" with "Whatever's on my mind"
     And I press "Save"
     Then the title is updated to "My old post has now been edited"
 

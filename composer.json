@@ -60,9 +60,6 @@
         ],
         "post-update-cmd": [
             "@symfony-scripts"
-        ],
-        "compile": [
-            "php bin/console doctrine:migrations:migrate --no-interaction"
         ]
     },
     "config": {

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Post;
+use AppBundle\Entity\PostRole;
 use AppBundle\Form\PostType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -25,7 +26,21 @@ class PostController extends Controller
 
         $form = $this->getForm($post);
 
-        $this->handlePostFormRequest($request, $form);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $post = $form->getData();
+
+            $doctrine = $this->getDoctrine();
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($post);
+            $entityManager->flush();
+
+            $postRepository = $doctrine->getRepository('AppBundle:Post');
+            $postRepository->addRole(PostRole::TYPE_OWNER, $post, $this->getUser());
+
+            return $this->redirectToRoute('post_edit', ['id' => $post->getId()]);
+        }
 
         return $this->render('AppBundle:Post:new.html.twig', [
             'form' => $form->createView(),
@@ -85,6 +100,7 @@ class PostController extends Controller
     /**
      * @param Request $request
      * @param Form $form
+     * @return void
      */
     private function handlePostFormRequest(Request $request, Form $form): void
     {

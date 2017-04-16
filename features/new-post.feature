@@ -10,8 +10,14 @@ Feature: New post
     Given I am logged in as "writer" with password "writer"
     And I am on "/new"
     And I fill in "Title" with "My first post"
+    And I fill in "Body" with "Some text"
     And I press "Save"
-    Then my post should be saved
+    Then I should be redirected to "/edit/1"
+    And the response status code should be 200
+
+    When I am on "/logout"
+    And I am on "edit/1"
+    Then I should be redirected to "/login"
 
   Scenario: Not logged in
     Given I am on "/new"

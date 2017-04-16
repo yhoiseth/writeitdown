@@ -1,4 +1,3 @@
-@watch
 Feature: List posts
   In order to find specific posts
   As a logged-in web user

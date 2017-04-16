@@ -20,6 +20,9 @@ class PostController extends Controller
     public function newAction(Request $request)
     {
         $post = new Post();
+
+        $this->denyAccessUnlessGranted('new', $post);
+
         $form = $this->getForm($post);
 
         $this->handlePostFormRequest($request, $form);

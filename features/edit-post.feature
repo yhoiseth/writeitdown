@@ -1,4 +1,3 @@
-@watch
 Feature: Edit post
   In order to improve posts
   As a logged-in web user

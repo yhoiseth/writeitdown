@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 class PostVoter extends Voter
 {
     const EDIT = 'edit';
+    const NEW = 'new';
     const SHOW = 'show';
 
 
@@ -26,6 +27,7 @@ class PostVoter extends Voter
     {
         $supportedAttributes = [
             self::EDIT,
+            self::NEW,
             self::SHOW,
         ];
 
@@ -56,6 +58,10 @@ class PostVoter extends Voter
 
         if (!$user instanceof $user) {
             return false;
+        }
+
+        if ($attribute === self::NEW) {
+            return true;
         }
 
         /** @var Post $post */

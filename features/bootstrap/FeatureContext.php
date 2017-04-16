@@ -281,6 +281,14 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
+     * @Then I should be redirected to :path
+     */
+    public function iShouldBeRedirectedTo($path)
+    {
+        $this->assertUrlRegExp('#/login#');
+    }
+
+    /**
      * @return array
      */
     private function getScenarioArguments(): array

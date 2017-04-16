@@ -40,6 +40,8 @@ class PostController extends Controller
         $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
         $post = $postRepository->find($id);
 
+        $this->denyAccessUnlessGranted('edit', $post);
+
         $form = $this->getForm($post);
 
         $this->handlePostFormRequest($request, $form);

@@ -162,8 +162,6 @@ class FeatureContext extends MinkContext implements Context
         ]);
 
         $this->visit('/edit/' . $post->getId());
-
-        $this->assertResponseStatus(200);
     }
 
     /**

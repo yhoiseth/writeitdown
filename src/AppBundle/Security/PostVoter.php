@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class PostVoter extends Voter
 {
+    const EDIT = 'edit';
     const SHOW = 'show';
 
 
@@ -23,7 +24,12 @@ class PostVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        if (!in_array($attribute, [self::SHOW])) {
+        $supportedAttributes = [
+            self::EDIT,
+            self::SHOW,
+        ];
+
+        if (!in_array($attribute, $supportedAttributes)) {
             return false;
         }
 
@@ -47,8 +53,6 @@ class PostVoter extends Voter
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
         $user = $token->getUser();
-
-//        dump($user);die;
 
         if (!$user instanceof $user) {
             return false;

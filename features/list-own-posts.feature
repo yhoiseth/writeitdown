@@ -1,4 +1,3 @@
-@watch
 Feature: List own posts
   In order to know which posts I have and access them
   As a logged-in web user

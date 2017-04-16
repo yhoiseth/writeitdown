@@ -168,7 +168,7 @@ class FeatureContext extends MinkContext implements Context
 
         $owner = $postRepository->getOwner($post);
 
-        $this->visit('/' . $owner->getId() . '/' . $post->getSlug() . '/edit');
+        $this->visit('/' . $owner->getUsername() . '/' . $post->getSlug() . '/edit');
     }
 
     /**
@@ -244,7 +244,12 @@ class FeatureContext extends MinkContext implements Context
      */
     public function iAmViewingTheGivenPost()
     {
-        $this->visit('/' . $this->getScenarioArgument('post')->getId());
+        $post = $this->getScenarioArgument('post');
+        /** @var PostRepository $postRepository */
+        $postRepository = $this->getEntityManager()->getRepository('AppBundle:Post');
+        $owner = $postRepository->getOwner($post);
+
+        $this->visit('/' . $owner->getUsername() . '/' . $post->getSlug());
     }
 
     /**

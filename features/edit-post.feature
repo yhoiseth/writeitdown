@@ -4,8 +4,8 @@ Feature: Edit post
   I need to be able to edit posts
 
   Background:
-    Given a user "editor" with password "editor"
-    And a user "malicious" with password "malicious"
+    Given a user "editor"
+    And a user "malicious"
     And a post with title "Editor's existing post"
     And the post belongs to "editor"
 

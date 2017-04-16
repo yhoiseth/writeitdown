@@ -4,8 +4,8 @@ Feature: Show post
   I need to be able to view my posts
 
   Background:
-    Given a user "bob" with password "bob"
-    And a user "alice" with password "alice"
+    Given a user "bob"
+    And a user "alice"
     And I am logged in as "bob" with password "bob"
 
   Scenario: Post exists

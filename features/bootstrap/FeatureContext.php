@@ -51,15 +51,16 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @Given a user :username with password :password
+     * @Given a user :username
+     * @param string $username
      */
-    public function aUserWithPassword($username, $password)
+    public function aUser(string $username)
     {
         $userManager = $this->getContainer()->get('fos_user.user_manager');
 
         $user = $userManager->createUser();
         $user->setUsername($username);
-        $user->setPlainPassword($password);
+        $user->setPlainPassword($username);
         $user->setEmail($username . '@example.com');
         $user->setEnabled(true);
 

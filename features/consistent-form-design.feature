@@ -3,9 +3,8 @@ Feature: Consistent form design
   As web user
   I should not experience any inconsistent form designs
 
-  @watch
   Scenario Outline: All forms available when logged in
-    Given a user "design-conscious" with password "design-conscious"
+    Given a user "design-conscious"
     And I am logged in as "design-conscious" with password "design-conscious"
     And a post with title "Example post"
     And the post belongs to "design-conscious"

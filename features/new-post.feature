@@ -8,7 +8,8 @@ Feature: New post
 
   Scenario: Logged in
     Given I am logged in as "writer" with password "writer"
-    And I am on "/new"
+    And I am on the homepage
+    And I click the "New post" link
     And I fill in "Title" with "My first post"
     And I fill in "Body" with "Some text"
     And I press "Save"

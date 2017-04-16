@@ -13,26 +13,25 @@ Feature: Navigation
   Scenario Outline: All pages, logged in
     Given a user "navigator"
     And I am logged in as "navigator"
-    And a post with title "Navigator's post"
-    And the post belongs to "navigator"
+    And that "navigator" has a post with title "Navigator's post"
     When I am on "<path>"
     Then I should see "Write it down"
     And I should see "New post"
     And I should see "Logout"
 
     Examples:
-      | path                     |
-      | /                        |
-      | /register                |
-      | /login                   |
-      | /new                     |
-      | /profile                 |
-      | /profile/edit            |
-      | /profile/change-password |
-      | /resetting/request       |
-      | /register/confirmed      |
-      | /edit/1                  |
-      | /1                       |
+      | path                             |
+      | /                                |
+      | /register                        |
+      | /login                           |
+      | /new                             |
+      | /profile                         |
+      | /profile/edit                    |
+      | /profile/change-password         |
+      | /resetting/request               |
+      | /register/confirmed              |
+      | /navigator/navigator-s-post/edit |
+      | /1                               |
 
 
     Scenario Outline: Public routes, not logged in

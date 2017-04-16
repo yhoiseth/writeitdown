@@ -174,7 +174,7 @@ class FeatureContext extends MinkContext implements Context
         $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
 
         Assert::assertNull($postRepository->findOneBy([
-            'title' => $this->getScenarioArgument('postTitle'),
+            'title' => $this->getScenarioArgument('post')->getTitle(),
         ]));
 
         Assert::assertInstanceOf('\AppBundle\Entity\Post', $postRepository->findOneBy([

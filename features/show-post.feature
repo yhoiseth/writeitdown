@@ -8,7 +8,6 @@ Feature: Show post
     And a user "alice" with password "alice"
     And I am logged in as "bob" with password "bob"
 
-  @watch
   Scenario: Post exists
     Given a post with title "Bob's post"
     And the post belongs to "bob"

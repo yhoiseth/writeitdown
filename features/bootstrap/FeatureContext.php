@@ -298,6 +298,14 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
+     * @Then the form should be styled using Twitter Bootstrap
+     */
+    public function theFormShouldBeStyledUsingTwitterBootstrap()
+    {
+        $this->assertElementOnPage('div.form-group');
+    }
+
+    /**
      * @return array
      */
     private function getScenarioArguments(): array

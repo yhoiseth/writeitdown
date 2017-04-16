@@ -65,6 +65,37 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/{username}", name="profile")
+     * @param Request $request
+     * @param string $username
+     * @return Response
+     */
+    public function profileAction(Request $request, string $username): Response
+    {
+        if ($this->getUser()->getUsername() !== $username) {
+            return new Response('', 403);
+        }
+
+        $postRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Post');
+        $userManager = $this->get('fos_user.user_manager');
+
+        $posts = $postRepository->createQueryBuilder('post')
+            ->join('post.roles', 'role')
+            ->where('role.user = :owner')
+            ->andWhere('role.type = :roleType')
+            ->setParameter('owner', $userManager->findUserByUsername($username))
+            ->setParameter('roleType', PostRole::TYPE_OWNER)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return $this->render('AppBundle:Profile:show.html.twig', [
+            'posts' => $posts,
+            'username' => $username,
+        ]);
+    }
+
+    /**
      * @Route("/{username}/{slug}/edit", name="post_edit")
      * @param Request $request
      * @param string $username
@@ -88,14 +119,16 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="post_show")
+     * @Route("/{username}/{slug}", name="post_show")
      * @param Request $request
-     * @param string $id
+     * @param string $slug
      * @return Response
      */
-    public function showAction(Request $request, string $id)
+    public function showAction(Request $request, string $slug)
     {
-        $post = $this->getDoctrine()->getRepository('AppBundle:Post')->find($id);
+        $post = $this->getDoctrine()->getRepository('AppBundle:Post')->findOneBy([
+            'slug' => $slug,
+        ]);
 
         $this->denyAccessUnlessGranted('show', $post);
 

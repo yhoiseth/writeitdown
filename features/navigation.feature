@@ -31,7 +31,7 @@ Feature: Navigation
       | /resetting/request               |
       | /register/confirmed              |
       | /navigator/navigator-s-post/edit |
-      | /1                               |
+      | /navigator/navigator-s-post      |
 
 
     Scenario Outline: Public routes, not logged in

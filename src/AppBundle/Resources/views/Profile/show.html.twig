@@ -1,0 +1,11 @@
+{% extends 'FOSUserBundle::layout.html.twig' %}
+
+{% block body %}
+    <ul>
+        {% for post in posts %}
+            <li>
+                {{ post.title }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -24,7 +24,8 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -40,23 +41,23 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             {% if app.user %}
-            <div class="nav navbar-nav navbar-right">
-                <a
-                        href="{{ path('post_new') }}"
-                        class="btn btn-success navbar-btn">
-                    New post
-                </a>
-            </div>
+                <div class="nav navbar-nav navbar-right">
+                    <a
+                            href="{{ path('post_new') }}"
+                            class="btn btn-success navbar-btn">
+                        New post
+                    </a>
+                </div>
             {% endif %}
             <ul class="nav navbar-nav navbar-right">
                 {% if app.user %}
-                <li>
-                    <a
-                            href="{{ path('fos_user_security_logout') }}"
-                    >
-                        Logout
-                    </a>
-                </li>
+                    <li>
+                        <a
+                                href="{{ path('fos_user_security_logout') }}"
+                        >
+                            Logout
+                        </a>
+                    </li>
                 {% else %}
                     <li>
                         <a
@@ -78,9 +79,11 @@
     </div>
 </nav>
 
-{% block fos_user_content %}{% endblock %}
+<div class="container">
+    {% block fos_user_content %}{% endblock %}
 
-{% block body %}{% endblock %}
+    {% block body %}{% endblock %}
+</div>
 {% block javascripts %}
     <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>

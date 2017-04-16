@@ -75,7 +75,7 @@ class FeatureContext extends MinkContext implements Context
     public function iAmLoggedIn()
     {
         $this->visit('/profile');
-        $this->assertPageContainsText('Logged in as marcus');
+        $this->assertPageContainsText('Logout');
     }
 
 

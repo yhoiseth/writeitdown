@@ -10,7 +10,6 @@ Feature: Navigation
     Then I should see "Write it down"
     And I should see "New post"
 
-  @watch
   Scenario Outline: All pages, logged in
     Given a user "navigator" with password "navigator"
     And I am logged in as "navigator" with password "navigator"
@@ -19,6 +18,7 @@ Feature: Navigation
     When I am on "<path>"
     Then I should see "Write it down"
     And I should see "New post"
+    And I should see "Logout"
 
     Examples:
       | path                     |
@@ -33,3 +33,20 @@ Feature: Navigation
       | /register/confirmed      |
       | /edit/1                  |
       | /1                       |
+
+
+    Scenario Outline: Public routes, not logged in
+      When I am on "<path>"
+      Then I should see "Write it down"
+      And I should not see "New post"
+      And I should see "Login"
+      And I should see "Register"
+
+    Examples:
+      | path                     |
+      | /                        |
+      | /register                |
+      | /login                   |
+      | /new                     |
+      | /resetting/request       |
+      | /register/confirmed      |

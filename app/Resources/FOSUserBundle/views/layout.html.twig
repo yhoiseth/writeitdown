@@ -39,6 +39,7 @@
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            {% if app.user %}
             <div class="nav navbar-nav navbar-right">
                 <a
                         href="{{ path('post_new') }}"
@@ -46,6 +47,33 @@
                     New post
                 </a>
             </div>
+            {% endif %}
+            <ul class="nav navbar-nav navbar-right">
+                {% if app.user %}
+                <li>
+                    <a
+                            href="{{ path('fos_user_security_logout') }}"
+                    >
+                        Logout
+                    </a>
+                </li>
+                {% else %}
+                    <li>
+                        <a
+                                href="{{ path('fos_user_security_login') }}"
+                        >
+                            Login
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                                href="{{ path('fos_user_registration_register') }}"
+                        >
+                            Register
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
         </div>
     </div>
 </nav>

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Stringy\Stringy;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,6 +11,8 @@ use AppBundle\Entity\Post;
 use AppBundle\Entity\PostRole;
 use AppBundle\Form\PostType;
 use Symfony\Component\Form\Form;
+use function Stringy\create as s;
+
 
 class DefaultController extends Controller
 {
@@ -29,17 +32,28 @@ class DefaultController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Post $post */
             $post = $form->getData();
+
+            $slug = $this->get('slugify')->slugify($post->getTitle());
 
             $doctrine = $this->getDoctrine();
             $entityManager = $doctrine->getManager();
+
+            while ($this->userOwnsPostWithSameSlug($slug)) {
+                $slug = $this->incrementSlug($slug);
+            }
+
+
+            $post->setSlug($slug);
+
             $entityManager->persist($post);
             $entityManager->flush();
 
             $postRepository = $doctrine->getRepository('AppBundle:Post');
             $postRepository->addRole(PostRole::TYPE_OWNER, $post, $this->getUser());
 
-            return $this->redirectToRoute('post_edit', ['id' => $post->getId()]);
+            return $this->redirectToRoute('post_edit', ['slug' => $post->getSlug()]);
         }
 
         return $this->render('AppBundle:Post:new.html.twig', [
@@ -48,15 +62,15 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/edit/{id}", name="post_edit")
+     * @Route("/edit/{slug}", name="post_edit")
      * @param Request $request
-     * @param $id
+     * @param string $slug
      * @return Response
      */
-    public function editAction(Request $request, string $id)
+    public function editAction(Request $request, string $slug)
     {
         $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
-        $post = $postRepository->find($id);
+        $post = $postRepository->findOneBy(['slug' => $slug]);
 
         $this->denyAccessUnlessGranted('edit', $post);
 
@@ -97,6 +111,35 @@ class DefaultController extends Controller
             'posts' => $this->getPostsICanView(),
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
         ]);
+    }
+
+    /**
+     * @param string $slug
+     * @return bool
+     */
+    private function userOwnsPostWithSameSlug(string $slug): bool
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $queryForPostsOwnedByUserWithSameSlug = $entityManager->getRepository('AppBundle:Post')
+            ->createQueryBuilder('post')
+            ->join('post.roles', 'role')
+            ->where('post.slug = :slug')
+            ->andWhere('role.user = :user')
+            ->andWhere('role.type = :roleType')
+            ->setParameter('slug', $slug)
+            ->setParameter('user', $this->getUser())
+            ->setParameter('roleType', PostRole::TYPE_OWNER)
+            ->getQuery()
+        ;
+
+        $postsOwnedByUserWithSameSlug = $queryForPostsOwnedByUserWithSameSlug->getResult();
+
+        if (count($postsOwnedByUserWithSameSlug) > 0) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -149,5 +192,37 @@ class DefaultController extends Controller
             $entityManager->persist($post);
             $entityManager->flush();
         }
+    }
+
+    /**
+     * @param string $slug
+     * @return string $slug
+     */
+    public function incrementSlug(string $slug): string
+    {
+        /** @var Stringy $parts */
+        $parts = s($slug)->split('-');
+
+        $numberOfParts = count($parts);
+
+        $lastPartIndex = $numberOfParts - 1;
+
+        $lastPart = $parts[$lastPartIndex];
+
+        if (ctype_digit((string) $lastPart)) {
+            $oldVersionNumber = (integer) (string) $lastPart;
+
+            $incrementedVersionNumber = $oldVersionNumber + 1;
+
+            $newLastPart = s((string) $incrementedVersionNumber);
+
+            $parts[$lastPartIndex] = $newLastPart;
+
+            $slug = implode('-', $parts);
+
+            return $slug;
+        }
+
+        return $slug . '-2';
     }
 }

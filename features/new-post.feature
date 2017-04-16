@@ -24,6 +24,7 @@ Feature: New post
   Scenario: Logged in, colliding slugs
     Given I am logged in as "writer"
     And I am on the homepage
+
     When I click the "New post" link
     And I fill in "Title" with "My first post"
     And I press "Save"
@@ -38,6 +39,21 @@ Feature: New post
     And I fill in "Title" with "My first post"
     And I press "Save"
     Then I should be redirected to "/edit/my-first-post-3"
+
+    When I click the "New post" link
+    And I fill in "Title" with "Short"
+    And I press "Save"
+    Then I should be redirected to "/edit/short"
+
+    When I click the "New post" link
+    And I fill in "Title" with "Short"
+    And I press "Save"
+    Then I should be redirected to "/edit/short-2"
+
+    When I click the "New post" link
+    And I fill in "Title" with "Short"
+    And I press "Save"
+    Then I should be redirected to "/edit/short-3"
 
   Scenario: Not logged in
     Given I am on "/new"

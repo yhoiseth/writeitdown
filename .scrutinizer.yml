@@ -5,3 +5,8 @@ build:
         before:
             -
                 command: bin/console server:start
+
+checks:
+    php:
+        code_rating: true
+        duplication: true

@@ -1,3 +1,4 @@
+@watch
 Feature: Edit post
   In order to improve posts
   As a logged-in web user
@@ -6,8 +7,7 @@ Feature: Edit post
   Background:
     Given a user "editor"
     And a user "malicious"
-    And a post with title "Editor's existing post"
-    And the post belongs to "editor"
+    And that "editor" has a post with title "Editor's existing post"
 
   Scenario: My post
     Given I am logged in as "editor"

@@ -46,13 +46,7 @@ class PostService
         $post->setTitle($title);
         $post->setBody($body);
 
-        $slug = $this->getSlugify()->slugify($title);
-
-        while ($this->userOwnsPostWithSameSlug($user, $slug)) {
-            $slug = $this->incrementSlug($slug);
-        }
-
-        $post->setSlug($slug);
+        $post = $this->setSlug($user, $post);
 
         $role = new PostRole();
         $role->setType(PostRole::TYPE_OWNER);
@@ -160,5 +154,24 @@ class PostService
     public function setSlugify(Slugify $slugify)
     {
         $this->slugify = $slugify;
+    }
+
+    /**
+     * @param User $user
+     * @param string $title
+     * @param Post $post
+     * @return Post
+     */
+    public function setSlug(User $user, Post $post): Post
+    {
+        $slug = $this->getSlugify()->slugify($post->getTitle());
+
+        while ($this->userOwnsPostWithSameSlug($user, $slug)) {
+            $slug = $this->incrementSlug($slug);
+        }
+
+        $post->setSlug($slug);
+
+        return $post;
     }
 }

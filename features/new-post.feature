@@ -7,7 +7,7 @@ Feature: New post
     Given a user "writer"
 
   Scenario: Logged in
-    Given I am logged in as "writer" with password "writer"
+    Given I am logged in as "writer"
     And I am on the homepage
     And I click the "New post" link
     And I fill in "Title" with "My first post"

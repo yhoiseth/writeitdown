@@ -16,9 +16,8 @@ Feature: List posts
     Then I should not see "User's first post"
     And I should not see "User's second post"
 
-  @watch
   Scenario: Logged in
     Given I am on the homepage
-    And I am logged in as "user" with password "user"
+    And I am logged in as "user"
 #    Then I should see "User's first post" The posts are visible, but somehow they aren't seen by the test
 #    And I should see "User's second post"

@@ -5,14 +5,14 @@ Feature: Navigation
 
   Scenario: Logged in on homepage
     Given a user "navigator"
-    And I am logged in as "navigator" with password "navigator"
+    And I am logged in as "navigator"
     And I am on the homepage
     Then I should see "Write it down"
     And I should see "New post"
 
   Scenario Outline: All pages, logged in
     Given a user "navigator"
-    And I am logged in as "navigator" with password "navigator"
+    And I am logged in as "navigator"
     And a post with title "Navigator's post"
     And the post belongs to "navigator"
     When I am on "<path>"

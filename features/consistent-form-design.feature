@@ -5,7 +5,7 @@ Feature: Consistent form design
 
   Scenario Outline: All forms available when logged in
     Given a user "design-conscious"
-    And I am logged in as "design-conscious" with password "design-conscious"
+    And I am logged in as "design-conscious"
     And a post with title "Example post"
     And the post belongs to "design-conscious"
     When I am on "<path>"

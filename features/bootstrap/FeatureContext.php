@@ -251,13 +251,12 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @Given I am logged in as :username with password :password
+     * @Given I am logged in as :username
      * @param string $username
-     * @param string $password
      */
-    public function iAmLoggedInAsWithPassword(string $username, string $password)
+    public function iAmLoggedInAs(string $username)
     {
-        $this->login($username, $password);
+        $this->login($username, $username);
     }
 
     /**

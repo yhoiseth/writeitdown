@@ -290,6 +290,14 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
+     * @Given I click the :linkText link
+     */
+    public function iClickTheLink($linkText)
+    {
+        $this->clickLink($linkText);
+    }
+
+    /**
      * @return array
      */
     private function getScenarioArguments(): array

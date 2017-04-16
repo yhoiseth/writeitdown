@@ -1,4 +1,3 @@
-@watch
 Feature: Navigation
   In order to find my way around the application
   As a web user

@@ -40,7 +40,11 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <div class="nav navbar-nav navbar-right">
-                <button type="submit" class="btn btn-success navbar-btn">New post</button>
+                <a
+                        href="{{ path('post_new') }}"
+                        class="btn btn-success navbar-btn">
+                    New post
+                </a>
             </div>
         </div>
     </div>

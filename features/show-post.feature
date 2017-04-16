@@ -3,10 +3,11 @@ Feature: Show post
   As a logged-in web user
   I need to be able to view my posts
 
+
   Background:
-    Given a user "bob" with password "bob"
-    And a user "alice" with password "alice"
-    And I am logged in as "bob" with password "bob"
+    Given a user "bob"
+    And a user "alice"
+    And I am logged in as "bob"
 
   Scenario: Post exists
     Given a post with title "Bob's post"

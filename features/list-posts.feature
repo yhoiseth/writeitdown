@@ -3,8 +3,9 @@ Feature: List posts
   As a logged-in web user
   I need to see a list of my posts
 
+
   Background:
-    Given a user "user" with password "user"
+    Given a user "user"
     And a post with title "User's first post"
     And the post belongs to "user"
     And a post with title "User's second post"
@@ -17,5 +18,6 @@ Feature: List posts
 
   Scenario: Logged in
     Given I am on the homepage
+    And I am logged in as "user"
 #    Then I should see "User's first post" The posts are visible, but somehow they aren't seen by the test
 #    And I should see "User's second post"

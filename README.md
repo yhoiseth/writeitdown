@@ -1,5 +1,8 @@
 # writeitdown2
 
+[![Build Status](https://scrutinizer-ci.com/g/yhoiseth/writeitdown/badges/build.png?b=master)](https://scrutinizer-ci.com/g/yhoiseth/writeitdown/build-status/master)
+
+
 ## Development
 
 1. Clone the repository.

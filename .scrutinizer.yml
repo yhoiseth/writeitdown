@@ -5,6 +5,10 @@ build:
         before:
             -
                 command: bin/console server:start
+    tests:
+        override:
+            -
+                command: composer test
 
 checks:
     php:

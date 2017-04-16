@@ -22,6 +22,8 @@
     "require": {
         "php": "~7.1",
         "behat/mink-selenium2-driver": "^1.3",
+        "cocur/slugify": "^2.5",
+        "danielstjules/stringy": "^3.0",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-cache-bundle": "^1.2",
         "doctrine/doctrine-migrations-bundle": "^1.0",
@@ -41,6 +43,7 @@
         "behat/mink-extension": "^2.2",
         "behat/mink-goutte-driver": "^1.2",
         "behat/symfony2-extension": "^2.1",
+        "phpspec/phpspec": "^3.2",
         "phpunit/phpunit": "5.*",
         "sensio/generator-bundle": "^3.0",
         "symfony/phpunit-bridge": "^3.0",
@@ -64,6 +67,11 @@
         "compile": [
             "bin/console doctrine:database:create --no-interaction --if-not-exists",
             "bin/console doctrine:migrations:migrate --no-interaction"
+        ],
+        "test": [
+            "vendor/bin/phpunit --colors=always",
+            "vendor/bin/phpspec run --ansi",
+            "vendor/bin/behat --colors"
         ]
     },
     "config": {

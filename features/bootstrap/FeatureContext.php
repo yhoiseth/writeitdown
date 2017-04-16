@@ -2,6 +2,7 @@
 
 use AppBundle\Entity\Post;
 use AppBundle\Entity\PostRole;
+use AppBundle\Repository\PostRepository;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
@@ -126,7 +127,7 @@ class FeatureContext extends MinkContext implements Context
         $entityManager = $this->getEntityManager();
         $post = $this->getScenarioArgument('post');
 
-        /** @var \AppBundle\Repository\PostRepository $postRepository */
+        /** @var PostRepository $postRepository */
         $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
         $userManager = $this->getContainer()->get('fos_user.user_manager');
 
@@ -156,13 +157,18 @@ class FeatureContext extends MinkContext implements Context
      */
     public function iAmOnTheEditPageFor($postTitle)
     {
-        $post = $this->getDoctrine()
-            ->getRepository('AppBundle:Post')
+        /** @var PostRepository $postRepository */
+        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
+
+        /** @var Post $post */
+        $post = $postRepository
             ->findOneBy([
                 'title' => $postTitle,
         ]);
 
-        $this->visit('/edit/' . $post->getId());
+        $owner = $postRepository->getOwner($post);
+
+        $this->visit('/' . $owner->getId() . '/' . $post->getSlug() . '/edit');
     }
 
     /**
@@ -303,6 +309,24 @@ class FeatureContext extends MinkContext implements Context
     public function theFormShouldBeStyledUsingTwitterBootstrap()
     {
         $this->assertElementOnPage('div.form-group');
+    }
+
+    /**
+     * @Given that :username has a post with title :title
+     * @param string $username
+     * @param string $title
+     */
+    public function thatHasAPostWithTitle(string $username, string $title)
+    {
+        $postService = $this->getContainer()->get('app.post_service');
+        $userManager = $this->getContainer()->get('fos_user.user_manager');
+
+        $post = $postService->createPost(
+            $userManager->findUserByUsername($username),
+            $title
+        );
+
+        $this->setScenarioArgument('post', $post);
     }
 
     /**

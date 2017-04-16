@@ -31,4 +31,25 @@ class PostRepository extends EntityRepository
         $entityManager->persist($role);
         $entityManager->flush();
     }
+
+    /**
+     * @param Post $post
+     * @return User
+     */
+    public function getOwner(Post $post): User
+    {
+        $entityManager = $this->getEntityManager();
+        $userRepository = $entityManager->getRepository('AppBundle:User');
+
+        return $userRepository
+            ->createQueryBuilder('user')
+            ->join('user.postRoles', 'role')
+            ->where('role.post = :post')
+            ->andWhere('role.type = :roleType')
+            ->setParameter('post', $post)
+            ->setParameter('roleType', PostRole::TYPE_OWNER)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

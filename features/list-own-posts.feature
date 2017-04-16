@@ -15,6 +15,15 @@ Feature: List own posts
     Given I am logged in as "listlover"
     And I am on "/listlover"
     Then I should see "First"
-    Then I should see "Second"
-    Then I should see "Third"
-    Then I should see "Fourth"
+    And I should see "Second"
+    And I should see "Third"
+    And I should see "Fourth"
+
+    When I click the "Fourth" link
+    Then I should be redirected to "/listlover/fourth"
+
+  Scenario: Other user's posts
+    Given a user "other"
+    And I am logged in as "other"
+    And I am on "/listlover"
+    Then the response status code should be 403

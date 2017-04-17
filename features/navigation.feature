@@ -18,34 +18,32 @@ Feature: Navigation
     Then I should see "Write it down"
     And I should see "New post"
     And I should see "Logout"
+    And the "title" element should contain "<title> \| Write it down"
 
     Examples:
-      | path                             |
-      | /                                |
-      | /register                        |
-      | /login                           |
-      | /new                             |
-      | /profile                         |
-      | /profile/edit                    |
-      | /profile/change-password         |
-      | /resetting/request               |
-      | /register/confirmed              |
-      | /navigator/navigator-s-post/edit |
-      | /navigator/navigator-s-post      |
+      | path                             | title                                    |
+      | /                                | Home                                     |
+      | /new                             | New post                                 |
+      | /profile                         | Profile                                  |
+      | /profile/edit                    | Profile \| Editing                       |
+      | /profile/change-password         | Change password \| Profile               |
+      | /register/confirmed              | Registration confirmed                   |
+      | /navigator/navigator-s-post/edit | Navigator's post \| Editing \| navigator |
+      | /navigator/navigator-s-post      | Navigator's post \| navigator            |
+      | /navigator                       | navigator                                |
 
 
-    Scenario Outline: Public routes, not logged in
-      When I am on "<path>"
-      Then I should see "Write it down"
-      And I should not see "New post"
-      And I should see "Login"
-      And I should see "Register"
+  Scenario Outline: Public routes, not logged in
+    When I am on "<path>"
+    Then I should see "Write it down"
+    And I should not see "New post"
+    And I should see "Login"
+    And I should see "Register"
+    And the "title" element should contain "<title> \| Write it down"
 
     Examples:
-      | path                     |
-      | /                        |
-      | /register                |
-      | /login                   |
-      | /new                     |
-      | /resetting/request       |
-      | /register/confirmed      |
+      | path               | title          |
+      | /                  | Home           |
+      | /register          | Register       |
+      | /login             | Login          |
+      | /resetting/request | Reset password |

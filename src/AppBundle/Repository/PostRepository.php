@@ -63,8 +63,10 @@ class PostRepository extends EntityRepository
         return $this
             ->createQueryBuilder('post')
             ->join('post.roles', 'role')
-            ->where('role.user = :user')
+            ->where('post.slug = :slug')
+            ->andWhere('role.user = :user')
             ->andWhere('role.type = :roleType')
+            ->setParameter('slug', $slug)
             ->setParameter('user', $owner)
             ->setParameter('roleType', PostRole::TYPE_OWNER)
             ->getQuery()

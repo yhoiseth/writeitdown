@@ -104,8 +104,7 @@ class DefaultController extends Controller
      */
     public function editAction(Request $request, string $username, string $slug)
     {
-        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
-        $post = $postRepository->findOneBy(['slug' => $slug]);
+        $post = $this->getPostBySlugAndOwner($username, $slug);
 
         $this->denyAccessUnlessGranted('edit', $post);
 
@@ -129,11 +128,7 @@ class DefaultController extends Controller
      */
     public function showAction(Request $request, string $slug, string $username): Response
     {
-        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
-
-        $owner = $this->get('fos_user.user_manager')->findUserByUsername($username);
-
-        $post = $postRepository->getPostBySlugAndOwner($slug, $owner);
+        $post = $this->getPostBySlugAndOwner($username, $slug);
 
         $this->denyAccessUnlessGranted('show', $post);
 
@@ -267,5 +262,20 @@ class DefaultController extends Controller
         }
 
         return $slug . '-2';
+    }
+
+    /**
+     * @param string $username
+     * @param string $slug
+     * @return Post
+     */
+    private function getPostBySlugAndOwner(string $username, string $slug): Post
+    {
+        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
+
+        $owner = $this->get('fos_user.user_manager')->findUserByUsername($username);
+
+        $post = $postRepository->getPostBySlugAndOwner($slug, $owner);
+        return $post;
     }
 }

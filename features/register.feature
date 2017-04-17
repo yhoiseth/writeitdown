@@ -1,3 +1,4 @@
+@watch
 Feature: Register
   In order to start using the app
   As a web user
@@ -15,7 +16,7 @@ Feature: Register
     And I fill in "Repeat password" with "some characters"
     And I press "Register"
     And the user "<username>" should not exist
-    Then I should see "The username is already used"
+    Then I should see "This value should not be identical to string \"<username>\""
 
     Examples:
       | username      |
@@ -57,3 +58,5 @@ Feature: Register
       | careers       |
       | developers    |
       | team          |
+      | app           |
+      | system        |

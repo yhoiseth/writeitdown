@@ -2,6 +2,7 @@
 
 use AppBundle\Entity\Post;
 use AppBundle\Entity\PostRole;
+use AppBundle\Entity\User;
 use AppBundle\Repository\PostRepository;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
@@ -398,6 +399,10 @@ class FeatureContext extends MinkContext implements Context
         $this->fillField('Username', $username);
         $this->fillField('Password', $password);
         $this->pressButton('Log in');
+
+        $user = $this->getContainer()->get('fos_user.user_manager')->findUserByUsername($username);
+
+        $this->setScenarioArgument('user', $user);
     }
 
     /**
@@ -420,5 +425,17 @@ class FeatureContext extends MinkContext implements Context
         $entityManager->flush();
 
         $this->setScenarioArgument('post', $post);
+    }
+
+    /**
+     * @Then I should see that I am viewing my own posts
+     */
+    public function iShouldSeeThatIAmViewingMyOwnPosts()
+    {
+        /** @var User $user */
+        $user = $this->getScenarioArgument('user');
+        $username = $user->getUsername();
+
+        $this->assertElementOnPage("ul.nav li.active a[href='/$username']");
     }
 }

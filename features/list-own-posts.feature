@@ -17,6 +17,7 @@ Feature: List own posts
     And I should see "Second"
     And I should see "Third"
     And I should see "Fourth"
+    And I should see that I am viewing my own posts
 
     When I click the "Fourth" link
     Then I should be redirected to "/listlover/fourth"

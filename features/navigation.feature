@@ -1,3 +1,4 @@
+@watch
 Feature: Navigation
   In order to find my way around the application
   As a web user
@@ -18,19 +19,19 @@ Feature: Navigation
     Then I should see "Write it down"
     And I should see "New post"
     And I should see "Logout"
-    And the "title" element should contain "<title> \| Write it down"
+    And the "title" element should contain "<title> Write it down"
 
     Examples:
-      | path                             | title                                    |
-      | /                                | Home                                     |
-      | /new                             | New post                                 |
-      | /profile                         | Profile                                  |
-      | /profile/edit                    | Profile \| Editing                       |
-      | /profile/change-password         | Change password \| Profile               |
-      | /register/confirmed              | Registration confirmed                   |
-      | /navigator/navigator-s-post/edit | Navigator's post \| Editing \| navigator |
-      | /navigator/navigator-s-post      | Navigator's post \| navigator            |
-      | /navigator                       | navigator                                |
+      | path                             | title                                       |
+      | /                                | Home \|                                     |
+      | /new                             | New post \|                                 |
+      | /profile                         | Profile \|                                  |
+      | /profile/edit                    | Profile \| Editing \|                       |
+      | /profile/change-password         | Change password \| Profile \|               |
+      | /register/confirmed              | Registration confirmed \|                   |
+      | /navigator/navigator-s-post/edit | Navigator's post \| Editing \| navigator \| |
+      | /navigator/navigator-s-post      | Navigator's post \| navigator \|            |
+      | /navigator                       | navigator \|                                |
 
 
   Scenario Outline: Public routes, not logged in
@@ -42,8 +43,8 @@ Feature: Navigation
     And the "title" element should contain "<title> \| Write it down"
 
     Examples:
-      | path               | title          |
-      | /                  | Home           |
-      | /register          | Register       |
-      | /login             | Login          |
-      | /resetting/request | Reset password |
+      | path               | title             |
+      | /                  | Home \|           |
+      | /register          | Register \|       |
+      | /login             | Login \|          |
+      | /resetting/request | Reset password \| |

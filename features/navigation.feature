@@ -19,6 +19,7 @@ Feature: Navigation
     Then I should see "Write it down"
     And I should see "New post"
     And I should see "Logout"
+    And I should see "My posts"
     And the "title" element should contain "<title> Write it down"
 
     Examples:

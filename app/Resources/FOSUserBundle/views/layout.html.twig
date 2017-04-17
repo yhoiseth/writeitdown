@@ -70,6 +70,15 @@
             {% endif %}
             <ul class="nav navbar-nav navbar-right">
                 {% if app.user %}
+                    <li
+                            {{ (app.request.attributes.get('_route') == 'profile') ? 'class="active"' }}
+                    >
+                        <a
+                                href="{{ path('profile', {'username': app.user.username}) }}"
+                        >
+                            My posts
+                        </a>
+                    </li>
                     <li>
                         <a
                                 href="{{ path('fos_user_security_logout') }}"

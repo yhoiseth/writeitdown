@@ -129,9 +129,11 @@ class DefaultController extends Controller
      */
     public function showAction(Request $request, string $slug, string $username): Response
     {
-        $post = $this->getDoctrine()->getRepository('AppBundle:Post')->findOneBy([
-            'slug' => $slug,
-        ]);
+        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
+
+        $owner = $this->get('fos_user.user_manager')->findUserByUsername($username);
+
+        $post = $postRepository->getPostBySlugAndOwner($slug, $owner);
 
         $this->denyAccessUnlessGranted('show', $post);
 

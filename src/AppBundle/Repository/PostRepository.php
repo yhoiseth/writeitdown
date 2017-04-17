@@ -52,4 +52,25 @@ class PostRepository extends EntityRepository
             ->getOneOrNullResult()
         ;
     }
+
+    /**
+     * @param string $slug
+     * @param User $owner
+     * @return Post
+     */
+    public function getPostBySlugAndOwner(string $slug, User $owner): Post
+    {
+        return $this
+            ->createQueryBuilder('post')
+            ->join('post.roles', 'role')
+            ->where('post.slug = :slug')
+            ->andWhere('role.user = :user')
+            ->andWhere('role.type = :roleType')
+            ->setParameter('slug', $slug)
+            ->setParameter('user', $owner)
+            ->setParameter('roleType', PostRole::TYPE_OWNER)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

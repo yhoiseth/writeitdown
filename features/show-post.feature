@@ -18,3 +18,13 @@ Feature: Show post
     Given that "alice" has a post with title "Alice's post"
     And I am viewing the given post
     Then the response status code should be 403
+
+  Scenario: Colliding slugs
+    Given that "bob" has a post with title "Post" and body "Written by Bob"
+    And that "alice" has a post with title "Post" and body "Written by Alice"
+    When I am on "/bob/post"
+    Then I should see "Written by Bob"
+
+    When I am logged in as "alice"
+    And I am on "/alice/post"
+    Then I should see "Written by Alice"

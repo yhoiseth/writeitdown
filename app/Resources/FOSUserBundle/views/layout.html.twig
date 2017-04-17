@@ -72,6 +72,13 @@
                 {% if app.user %}
                     <li>
                         <a
+                                href="{{ path('profile', {'username': app.user.username}) }}"
+                        >
+                            My posts
+                        </a>
+                    </li>
+                    <li>
+                        <a
                                 href="{{ path('fos_user_security_logout') }}"
                         >
                             Logout

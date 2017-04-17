@@ -20,3 +20,16 @@ Feature: Edit post
     Given I am logged in as "malicious"
     And I am on the edit page for "Editor's existing post"
     Then the response status code should be 403
+
+  Scenario: Colliding slugs
+    Given a user "bob"
+    And a user "alice"
+    And that "bob" has a post with title "Post" and body "Written by Bob"
+    And that "alice" has a post with title "Post" and body "Written by Alice"
+    And I am logged in as "bob"
+    When I am on "/bob/post/edit"
+    Then I should see "Written by Bob"
+
+    When I am logged in as "alice"
+    And I am on "/alice/post/edit"
+    Then I should see "Written by Alice"

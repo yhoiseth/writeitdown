@@ -336,6 +336,18 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
+     * @Then the user :username should not exist
+     * @param string $username
+     */
+    public function theUserShouldNotExist(string $username)
+    {
+        $userManager = $this->getContainer()->get('fos_user.user_manager');
+        $user = $userManager->findUserByUsername($username);
+
+        Assert::assertNull($user, 'User was created with reserved username');
+    }
+
+    /**
      * @return array
      */
     private function getScenarioArguments(): array

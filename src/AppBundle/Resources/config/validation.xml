@@ -1,0 +1,215 @@
+<?xml version="1.0" ?>
+<constraint-mapping xmlns="http://symfony.com/schema/dic/constraint-mapping"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping
+        http://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd">
+
+    <class name="FOS\UserBundle\Model\User">
+
+        <property name="username">
+            <constraint name="NotBlank">
+                <option name="message">fos_user.username.blank</option>
+                <option name="groups">
+                    <value>Registration</value>
+                    <value>Profile</value>
+                </option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="minMessage">fos_user.username.short</option>
+                <option name="max">180</option>
+                <option name="maxMessage">fos_user.username.long</option>
+                <option name="groups">
+                    <value>Registration</value>
+                    <value>Profile</value>
+                </option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">help</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">support</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">about</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">pricing</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">api</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">product</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">new</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">register</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">profile</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">login</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">logout</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">resetting</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">_wdt</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">_profiler</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">_error</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">login_check</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">jobs</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">integrations</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">add-ons</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">templates</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">themes</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">blog</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">news</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">downloads</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">press</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">social</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">documentation</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">customers</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">case-studies</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">references</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">open-source</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">contact</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">privacy</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">terms</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">policy</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">careers</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">developers</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">team</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">app</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">system</option>
+            </constraint>
+        </property>
+
+        <property name="email">
+            <constraint name="NotBlank">
+                <option name="message">fos_user.email.blank</option>
+                <option name="groups">
+                    <value>Registration</value>
+                    <value>Profile</value>
+                </option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="minMessage">fos_user.email.short</option>
+                <option name="max">180</option>
+                <option name="maxMessage">fos_user.email.long</option>
+                <option name="groups">
+                    <value>Registration</value>
+                    <value>Profile</value>
+                </option>
+            </constraint>
+            <constraint name="Email">
+                <option name="message">fos_user.email.invalid</option>
+                <option name="groups">
+                    <value>Registration</value>
+                    <value>Profile</value>
+                </option>
+            </constraint>
+        </property>
+
+        <property name="plainPassword">
+            <constraint name="NotBlank">
+                <option name="message">fos_user.password.blank</option>
+                <option name="groups">
+                    <value>Registration</value>
+                    <value>ResetPassword</value>
+                    <value>ChangePassword</value>
+                </option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="max">4096</option>
+                <option name="minMessage">fos_user.password.short</option>
+                <option name="groups">
+                    <value>Registration</value>
+                    <value>Profile</value>
+                    <value>ResetPassword</value>
+                    <value>ChangePassword</value>
+                </option>
+            </constraint>
+        </property>
+    </class>
+
+    <class name="FOS\UserBundle\Model\Group">
+        <property name="name">
+            <constraint name="NotBlank">
+                <option name="message">fos_user.group.blank</option>
+                <option name="groups">Registration</option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="minMessage">fos_user.group.short</option>
+                <option name="max">180</option>
+                <option name="maxMessage">fos_user.group.long</option>
+                <option name="groups">Registration</option>
+            </constraint>
+        </property>
+    </class>
+
+</constraint-mapping>

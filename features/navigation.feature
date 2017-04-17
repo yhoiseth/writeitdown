@@ -1,4 +1,4 @@
-@watch
+
 Feature: Navigation
   In order to find my way around the application
   As a web user
@@ -25,14 +25,13 @@ Feature: Navigation
       | path                             | title                                       |
       | /                                | Home \|                                     |
       | /new                             | New post \|                                 |
-      | /profile                         | Profile \|                                  |
-      | /profile/edit                    | Profile \| Editing \|                       |
-      | /profile/change-password         | Change password \| Profile \|               |
+      | /profile                         |                                             |
+      | /profile/edit                    |                                             |
+      | /profile/change-password         |                                             |
       | /register/confirmed              | Registration confirmed \|                   |
       | /navigator/navigator-s-post/edit | Navigator's post \| Editing \| navigator \| |
       | /navigator/navigator-s-post      | Navigator's post \| navigator \|            |
       | /navigator                       | navigator \|                                |
-
 
   Scenario Outline: Public routes, not logged in
     When I am on "<path>"
@@ -40,7 +39,7 @@ Feature: Navigation
     And I should not see "New post"
     And I should see "Login"
     And I should see "Register"
-    And the "title" element should contain "<title> \| Write it down"
+    And the "title" element should contain "<title> Write it down"
 
     Examples:
       | path               | title             |

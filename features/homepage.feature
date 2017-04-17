@@ -2,4 +2,4 @@ Feature: Homepage
 
   Scenario: Visit the homepage
     Given I am on the homepage
-    Then I should see "Welcome"
+    Then I should see "Write it down"

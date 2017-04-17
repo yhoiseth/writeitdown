@@ -115,6 +115,8 @@ class DefaultController extends Controller
 
         return $this->render('AppBundle:Post:edit.html.twig', [
             'form' => $form->createView(),
+            'username' => $username,
+            'post' => $post,
         ]);
     }
 
@@ -122,9 +124,10 @@ class DefaultController extends Controller
      * @Route("/{username}/{slug}", name="post_show")
      * @param Request $request
      * @param string $slug
+     * @param string $username
      * @return Response
      */
-    public function showAction(Request $request, string $slug)
+    public function showAction(Request $request, string $slug, string $username): Response
     {
         $post = $this->getDoctrine()->getRepository('AppBundle:Post')->findOneBy([
             'slug' => $slug,
@@ -134,6 +137,7 @@ class DefaultController extends Controller
 
         return $this->render('AppBundle:Post:show.html.twig', [
             'post' => $post,
+            'username' => $username,
         ]);
     }
 

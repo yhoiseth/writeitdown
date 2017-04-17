@@ -1,10 +1,9 @@
 {% extends 'FOSUserBundle::layout.html.twig' %}
 
+{% block title %}
+    {{ post.title }} | {{ username }} {{ parent() }}
+{% endblock %}
+
 {% block body %}
     {{ post.body|markdown }}
 {% endblock %}
-
-{% block title %}
-
-{% endblock %}
-

@@ -1,5 +1,9 @@
 {% extends 'FOSUserBundle::layout.html.twig' %}
 
+{% block title %}
+    {{ username }} {{ parent() }}
+{% endblock %}
+
 {% block body %}
     <div class="list-group">
         {% for post in posts %}

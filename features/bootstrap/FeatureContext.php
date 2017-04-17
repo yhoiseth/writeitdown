@@ -399,4 +399,26 @@ class FeatureContext extends MinkContext implements Context
         $this->fillField('Password', $password);
         $this->pressButton('Log in');
     }
+
+    /**
+     * @Given that :username has a post with title :title and body :body
+     * @param string $username
+     * @param string $title
+     * @param string $body
+     */
+    public function thatHasAPostWithTitleAndBody(string $username, string $title, string $body)
+    {
+        $this->thatHasAPostWithTitle($username, $title);
+
+        /** @var Post $post */
+        $post = $this->getScenarioArgument('post');
+
+        $post->setBody($body);
+
+        $entityManager = $this->getEntityManager();
+        $entityManager->persist($post);
+        $entityManager->flush();
+
+        $this->setScenarioArgument('post', $post);
+    }
 }

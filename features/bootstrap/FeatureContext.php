@@ -341,7 +341,7 @@ class FeatureContext extends MinkContext implements Context
      */
     public function theUserShouldNotExist(string $username)
     {
-        $user = $this->findUserByUsername($username);
+        $user = $this->getUserByUsername($username);
 
         Assert::assertNull($user, 'User was created with reserved username');
     }
@@ -352,7 +352,7 @@ class FeatureContext extends MinkContext implements Context
      */
     public function weHaveRecordedThatWasCreatedAndUpdatedJustNow(string $username)
     {
-        $user = $this->findUserByUsername($username);
+        $user = $this->getUserByUsername($username);
         $createdAt = $user->getCreatedAt();
         $updatedAt = $user->getUpdatedAt();
         $aFewSecondsAgo = new \DateTime('-3 seconds');
@@ -361,6 +361,40 @@ class FeatureContext extends MinkContext implements Context
         Assert::assertInstanceOf('\DateTime', $updatedAt);
         Assert::assertGreaterThan($aFewSecondsAgo, $createdAt);
         Assert::assertGreaterThan($aFewSecondsAgo, $updatedAt);
+    }
+
+    /**
+     * @When I wait for :numberOfSeconds seconds
+     * @param string $numberOfSeconds
+     */
+    public function iWaitForSeconds(string $numberOfSeconds)
+    {
+        sleep((integer) $numberOfSeconds);
+    }
+
+    /**
+     * @Then we have recorded that :username was updated after creation
+     */
+    public function weHaveRecordedThatWasUpdatedAfterCreation($username)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = $entityManager->getConnection();
+
+        $statement = $connection->prepare('SELECT created_at, updated_at FROM user WHERE username = :username');
+        $statement->bindValue('username', $username);
+        $statement->execute();
+
+        $datetimes = $statement->fetchAll()[0];
+
+        $createdAt = DateTime::createFromFormat('Y-m-d H:i:s', $datetimes['created_at']);
+        $updatedAt = DateTime::createFromFormat('Y-m-d H:i:s', $datetimes['updated_at']);
+
+        Assert::assertGreaterThan(
+            $createdAt->add(new \DateInterval('PT5S')),
+            $updatedAt
+        );
     }
 
     /**
@@ -469,9 +503,9 @@ class FeatureContext extends MinkContext implements Context
 
     /**
      * @param string $username
-     * @return User
+     * @return User|null
      */
-    private function findUserByUsername(string $username): User
+    private function getUserByUsername(string $username)
     {
         $userManager = $this->getContainer()->get('fos_user.user_manager');
 

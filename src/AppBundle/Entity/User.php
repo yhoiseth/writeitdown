@@ -97,6 +97,14 @@ class User extends BaseUser
     }
 
     /**
+     * @ORM\PreUpdate
+     */
+    public function updateUpdatedAt()
+    {
+        $this->setUpdatedAt(new \DateTime());
+    }
+
+    /**
      * @return \DateTime
      */
     public function getCreatedAt(): \DateTime

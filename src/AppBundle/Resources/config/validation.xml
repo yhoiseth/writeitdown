@@ -144,6 +144,18 @@
             <constraint name="NotIdenticalTo">
                 <option name="value">system</option>
             </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">dashboard</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">settings</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">preferences</option>
+            </constraint>
+            <constraint name="NotIdenticalTo">
+                <option name="value">analytics</option>
+            </constraint>
         </property>
 
         <property name="email">

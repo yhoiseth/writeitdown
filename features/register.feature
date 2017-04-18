@@ -1,4 +1,3 @@
-@watch
 Feature: Register
   In order to start using the app
   As a web user
@@ -60,3 +59,7 @@ Feature: Register
       | team          |
       | app           |
       | system        |
+      | dashboard     |
+      | settings      |
+      | preferences   |
+      | analytics     |

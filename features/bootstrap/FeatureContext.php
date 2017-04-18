@@ -341,10 +341,26 @@ class FeatureContext extends MinkContext implements Context
      */
     public function theUserShouldNotExist(string $username)
     {
-        $userManager = $this->getContainer()->get('fos_user.user_manager');
-        $user = $userManager->findUserByUsername($username);
+        $user = $this->findUserByUsername($username);
 
         Assert::assertNull($user, 'User was created with reserved username');
+    }
+
+    /**
+     * @Then we have recorded that :username was created and updated just now
+     * @param string $username
+     */
+    public function weHaveRecordedThatWasCreatedAndUpdatedJustNow(string $username)
+    {
+        $user = $this->findUserByUsername($username);
+        $createdAt = $user->getCreatedAt();
+        $updatedAt = $user->getUpdatedAt();
+        $aFewSecondsAgo = new \DateTime('-3 seconds');
+
+        Assert::assertInstanceOf('\DateTime', $createdAt);
+        Assert::assertInstanceOf('\DateTime', $updatedAt);
+        Assert::assertGreaterThan($aFewSecondsAgo, $createdAt);
+        Assert::assertGreaterThan($aFewSecondsAgo, $updatedAt);
     }
 
     /**
@@ -449,5 +465,24 @@ class FeatureContext extends MinkContext implements Context
         $username = $user->getUsername();
 
         $this->assertElementOnPage("ul.nav li.active a[href='/$username']");
+    }
+
+    /**
+     * @param string $username
+     * @return User
+     */
+    private function findUserByUsername(string $username): User
+    {
+        $userManager = $this->getContainer()->get('fos_user.user_manager');
+
+        return $userManager->findUserByUsername($username);
+    }
+
+    private function debug(): void
+    {
+        $html = $this->getSession()->getPage()->getHtml();
+        $currentUrl = $this->getSession()->getCurrentUrl();
+        dump($html);
+        dump($currentUrl);
     }
 }

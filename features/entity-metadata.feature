@@ -10,6 +10,6 @@ Feature: Entity metadata
     And I fill in "Username" with "billy-bob"
     And I fill in "Password" with "billy-bob"
     And I fill in "Repeat password" with "billy-bob"
+    And I press "Register"
 
-    Then we have recorded that "billy-bob" created their own user account just now
-    And we have recorded that "billy-bob" updated their own user account just now
+    Then we have recorded that "billy-bob" was created and updated just now

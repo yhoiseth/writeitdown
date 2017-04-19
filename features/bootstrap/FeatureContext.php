@@ -58,18 +58,7 @@ class FeatureContext extends MinkContext implements Context
      */
     public function aUser(string $username)
     {
-        $userManager = $this->getContainer()->get('fos_user.user_manager');
-
-        $user = $userManager->createUser();
-        $user->setUsername($username);
-        $user->setPlainPassword($username);
-        $user->setEmail($username . '@example.com');
-        $user->setEnabled(true);
-
-        $entityManager = $this->getEntityManager();
-
-        $entityManager->persist($user);
-        $entityManager->flush();
+        $this->createUser($username);
     }
 
     /**
@@ -268,7 +257,28 @@ class FeatureContext extends MinkContext implements Context
      */
     public function iAmLoggedInAs(string $username)
     {
+        if (!$this->getUserByUsername($username)) {
+            $this->createUser($username);
+        }
+
         $this->login($username, $username);
+    }
+
+    /**
+     * @Then we have recorded that the post :title was just created and updated by :username
+     * @param string $title
+     * @param string $username
+     */
+    public function weHaveRecordedThatThePostWasJustCreatedAndUpdatedBy(string $title, string $username)
+    {
+        $postRepository = $this->getContainer()->get('doctrine')->getRepository('AppBundle:Post');
+        $slug = $this->getContainer()->get('slugify')->slugify($title);
+
+        $post = $postRepository->getPostBySlugAndOwner($slug, $this->getUserByUsername($username));
+        $createdAt = $post->getCreatedAt();
+
+
+        throw new PendingException();
     }
 
     /**
@@ -518,5 +528,24 @@ class FeatureContext extends MinkContext implements Context
         $currentUrl = $this->getSession()->getCurrentUrl();
         dump($html);
         dump($currentUrl);
+    }
+
+    /**
+     * @param string $username
+     */
+    private function createUser(string $username): void
+    {
+        $userManager = $this->getContainer()->get('fos_user.user_manager');
+
+        $user = $userManager->createUser();
+        $user->setUsername($username);
+        $user->setPlainPassword($username);
+        $user->setEmail($username . '@example.com');
+        $user->setEnabled(true);
+
+        $entityManager = $this->getEntityManager();
+
+        $entityManager->persist($user);
+        $entityManager->flush();
     }
 }

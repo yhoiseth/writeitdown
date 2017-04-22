@@ -3,6 +3,7 @@ Feature: Entity metadata
   As the application owner
   I want to make sure that we record when entities are created and modified and by whom
 
+  @watch
   Scenario: Create and update user
     Given I am on "/register"
     When I fill in "Email" with "billy@bob.com"
@@ -18,13 +19,3 @@ Feature: Entity metadata
     And I fill in "Current password" with "billy-bob"
     And I press "Update"
     Then we have recorded that "billy-bo" was updated after creation
-
-  @watch
-  Scenario: Create and update post
-    Given I am logged in as "writer"
-    And I am on the homepage
-    And I click the "New post" link
-    And I fill in "Title" with "My post"
-    And I press "Save"
-    Then we have recorded that the post "My post" was just created and updated by "writer"
-

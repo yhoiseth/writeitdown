@@ -398,6 +398,25 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
+     * @Then the system should have recorded that the post :title was created just now
+     */
+    public function theSystemShouldHaveRecordedThatThePostWasCreatedJustNow($title)
+    {
+        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
+
+        /** @var Post $post */
+        $post = $postRepository->findOneBy([
+            'title' => $title
+        ]);
+
+        Assert::assertInstanceOf('\AppBundle\Entity\Post', $post);
+
+        $createdAt = $post->getCreatedAt();
+
+        throw new PendingException();
+    }
+
+    /**
      * @return array
      */
     private function getScenarioArguments(): array

@@ -3,7 +3,6 @@ Feature: Entity metadata
   As the application owner
   I want to make sure that we record when entities are created and modified and by whom
 
-  @watch
   Scenario: Create and update user
     Given I am on "/register"
     When I fill in "Email" with "billy@bob.com"

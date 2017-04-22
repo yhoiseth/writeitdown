@@ -31,23 +31,29 @@ class Version20170416205804 extends AbstractMigration implements ContainerAwareI
         /** @var PostRepository $postRepository */
         $postRepository = $entityManager->getRepository('AppBundle:Post');
 
-        $posts = $postRepository->findAll();
+        /**
+         * This try/catch-block proved necessary when a property (column) was later added to the Post entity.
+         * Running all the migrations from a blank database would then fail because a column was missing from Post,
+         * throwing exceptions. (This migration is run before the one adding the missing
+         * column – Version20170422124140.)
+         */
+        try {
+            $posts = $postRepository->findAll();
 
-        $postService = $container->get('app.post_service');
+            $postService = $container->get('app.post_service');
 
-        foreach ($posts as $post) {
-            $post = $postService->setSlug(
-                $postRepository->getOwner($post),
-                $post
-            );
+            foreach ($posts as $post) {
+                $post = $postService->setSlug(
+                    $postRepository->getOwner($post),
+                    $post
+                );
 
-            $entityManager->persist($post);
-            $entityManager->flush();
+                $entityManager->persist($post);
+                $entityManager->flush();
+            }
+        } catch (\Exception $exception) {
+
         }
-
-
-
-
     }
 
     /**

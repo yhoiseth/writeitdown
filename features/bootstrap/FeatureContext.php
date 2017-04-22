@@ -412,8 +412,11 @@ class FeatureContext extends MinkContext implements Context
         Assert::assertInstanceOf('\AppBundle\Entity\Post', $post);
 
         $createdAt = $post->getCreatedAt();
+        $now = new \DateTime();
+        $fiveSecondsAgo = new \DateTime('-5 seconds');
 
-        throw new PendingException();
+        Assert::assertGreaterThan($fiveSecondsAgo, $createdAt);
+        Assert::assertGreaterThanOrEqual($createdAt, $now);
     }
 
     /**

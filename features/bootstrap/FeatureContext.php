@@ -398,9 +398,10 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @Then the system should have recorded that the post :title was created just now
+     * @Then the system should have recorded that the post :title was created and updated just now
+     * @param string $title
      */
-    public function theSystemShouldHaveRecordedThatThePostWasCreatedJustNow($title)
+    public function theSystemShouldHaveRecordedThatThePostWasCreatedAndUpdatedJustNow(string $title)
     {
         $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
 
@@ -412,11 +413,13 @@ class FeatureContext extends MinkContext implements Context
         Assert::assertInstanceOf('\AppBundle\Entity\Post', $post);
 
         $createdAt = $post->getCreatedAt();
+        $updatedAt = $post->getUpdatedAt();
         $now = new \DateTime();
         $fiveSecondsAgo = new \DateTime('-5 seconds');
 
         Assert::assertGreaterThan($fiveSecondsAgo, $createdAt);
         Assert::assertGreaterThanOrEqual($createdAt, $now);
+        Assert::assertEquals($createdAt, $updatedAt);
     }
 
     /**

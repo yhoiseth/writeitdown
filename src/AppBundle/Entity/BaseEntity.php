@@ -27,9 +27,19 @@ class BaseEntity
      */
     protected $createdAt;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $updatedAt;
+
     public function __construct()
     {
-        $this->setCreatedAt(new \DateTime());
+        $now = new \DateTime();
+
+        $this->setCreatedAt($now);
+        $this->setUpdatedAt($now);
     }
 
     /**
@@ -59,5 +69,21 @@ class BaseEntity
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     */
+    public function setUpdatedAt(\DateTime $updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
     }
 }

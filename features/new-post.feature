@@ -6,6 +6,7 @@ Feature: New post
   Background:
     Given a user "writer"
 
+  @watch
   Scenario: Logged in, create one post
     Given I am logged in as "writer"
     And I am on the homepage
@@ -15,6 +16,7 @@ Feature: New post
     And I press "Save"
     Then I should be redirected to "/writer/my-first-post/edit"
     And the response status code should be 200
+    And the system should have recorded that the post "My first post" was created just now
 
     When I am on "/logout"
     And I am on "/writer/my-first-post/edit"

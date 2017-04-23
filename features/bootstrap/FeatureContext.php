@@ -403,12 +403,7 @@ class FeatureContext extends MinkContext implements Context
      */
     public function theSystemShouldHaveRecordedThatThePostWasCreatedAndUpdatedJustNow(string $title)
     {
-        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
-
-        /** @var Post $post */
-        $post = $postRepository->findOneBy([
-            'title' => $title
-        ]);
+        $post = $this->getPostByTitle($title);
 
         Assert::assertInstanceOf('\AppBundle\Entity\Post', $post);
 
@@ -428,7 +423,23 @@ class FeatureContext extends MinkContext implements Context
      */
     public function theSystemHasRecordedThatThePostWasUpdatedAfterItsCreation(string $title)
     {
-        throw new PendingException();
+        $entityManager = $this->getDoctrine()->getManager();
+
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = $entityManager->getConnection();
+
+        $statement = $connection->prepare('SELECT created_at, updated_at FROM post WHERE title = :title');
+        $statement->bindValue('title', $title);
+        $statement->execute();
+
+        $datetimes = $statement->fetchAll()[0];
+
+        $createdAt = DateTime::createFromFormat('Y-m-d H:i:s', $datetimes['created_at']);
+        $updatedAt = DateTime::createFromFormat('Y-m-d H:i:s', $datetimes['updated_at']);
+
+        Assert::assertInstanceOf('\DateTime', $createdAt);
+        Assert::assertInstanceOf('\DateTime', $updatedAt);
+        Assert::assertGreaterThan($createdAt, $updatedAt);
     }
 
     /**
@@ -552,5 +563,21 @@ class FeatureContext extends MinkContext implements Context
         $currentUrl = $this->getSession()->getCurrentUrl();
         dump($html);
         dump($currentUrl);
+    }
+
+    /**
+     * @param string $title
+     * @return Post
+     */
+    private function getPostByTitle(string $title): Post
+    {
+        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
+
+        /** @var Post $post */
+        $post = $postRepository->findOneBy([
+            'title' => $title
+        ]);
+
+        return $post;
     }
 }

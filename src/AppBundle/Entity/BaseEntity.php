@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * BaseEntity
  *
  * @ORM\MappedSuperclass()
+ * @ORM\HasLifecycleCallbacks
  */
 class BaseEntity
 {
@@ -85,5 +86,13 @@ class BaseEntity
     public function setUpdatedAt(\DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function updateUpdatedAt()
+    {
+        $this->setUpdatedAt(new \DateTime());
     }
 }

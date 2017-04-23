@@ -423,6 +423,15 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
+     * @Then the system has recorded that the post :title was updated after its creation
+     * @param string $title
+     */
+    public function theSystemHasRecordedThatThePostWasUpdatedAfterItsCreation(string $title)
+    {
+        throw new PendingException();
+    }
+
+    /**
      * @return array
      */
     private function getScenarioArguments(): array

@@ -15,6 +15,7 @@ Feature: Edit post
     And I fill in "Body" with "Whatever's on my mind"
     And I press "Save"
     Then the title is updated to "My old post has now been edited"
+    And the system has recorded that the post "My old post has now been edited" was updated after its creation
 
   Scenario: Someone else's post
     Given I am logged in as "malicious"

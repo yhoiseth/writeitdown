@@ -5,16 +5,7 @@ $(document).ready(function () {
     var url = $form.data('autosave-url');
 
     $.post(url, serializedForm, function(response) {
-      if (response === 'success') {
-        console.log('saved!');
-
-
-
-
-
-
-
-      }
+      console.log(response);
     });
   });
 });

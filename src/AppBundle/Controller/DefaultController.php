@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Stringy\Stringy;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Post;
@@ -110,7 +111,7 @@ class DefaultController extends Controller
 
         $form = $this->getForm($post);
 
-        $this->handlePostFormRequest($request, $form);
+        $post = $this->handlePostFormRequest($request, $form, $post);
 
         return $this->render('AppBundle:Post:edit.html.twig', [
             'form' => $form->createView(),
@@ -131,9 +132,17 @@ class DefaultController extends Controller
 
         $post = $postRepository->find($id);
 
-        $this->editPost($request, $post);
+        $this->denyAccessUnlessGranted('edit', $post);
 
-        return new Response('success');
+        $form = $this->getForm($post);
+
+        $post = $this->handlePostFormRequest($request, $form, $post);
+
+        return new JsonResponse(
+            json_encode([
+                'updatedAt' => $post->getUpdatedAt()
+            ])
+        );
     }
 
     /**
@@ -235,9 +244,10 @@ class DefaultController extends Controller
     /**
      * @param Request $request
      * @param Form $form
-     * @return void
+     * @param Post $post
+     * @return Post
      */
-    private function handlePostFormRequest(Request $request, Form $form): void
+    private function handlePostFormRequest(Request $request, Form $form, Post $post)
     {
         $form->handleRequest($request);
 
@@ -247,6 +257,8 @@ class DefaultController extends Controller
             $entityManager->persist($post);
             $entityManager->flush();
         }
+
+        return $post;
     }
 
     /**
@@ -294,21 +306,5 @@ class DefaultController extends Controller
 
         $post = $postRepository->getPostBySlugAndOwner($slug, $owner);
         return $post;
-    }
-
-    /**
-     * @param Request $request
-     * @param Post $post
-     * @return Form
-     */
-    private function editPost(Request $request, Post $post): Form
-    {
-        $this->denyAccessUnlessGranted('edit', $post);
-
-        $form = $this->getForm($post);
-
-        $this->handlePostFormRequest($request, $form);
-
-        return $form;
     }
 }

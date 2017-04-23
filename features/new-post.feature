@@ -6,7 +6,6 @@ Feature: New post
   Background:
     Given a user "writer"
 
-  @watch
   Scenario: Logged in, create one post
     Given I am logged in as "writer"
     And I am on the homepage

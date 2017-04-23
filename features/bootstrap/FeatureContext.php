@@ -1,5 +1,6 @@
 <?php
 
+use AppBundle\Entity\BaseEntity;
 use AppBundle\Entity\Post;
 use AppBundle\Entity\PostRole;
 use AppBundle\Entity\User;
@@ -341,10 +342,109 @@ class FeatureContext extends MinkContext implements Context
      */
     public function theUserShouldNotExist(string $username)
     {
-        $userManager = $this->getContainer()->get('fos_user.user_manager');
-        $user = $userManager->findUserByUsername($username);
+        $user = $this->getUserByUsername($username);
 
         Assert::assertNull($user, 'User was created with reserved username');
+    }
+
+    /**
+     * @Then we have recorded that :username was created and updated just now
+     * @param string $username
+     */
+    public function weHaveRecordedThatWasCreatedAndUpdatedJustNow(string $username)
+    {
+        $user = $this->getUserByUsername($username);
+        $createdAt = $user->getCreatedAt();
+        $updatedAt = $user->getUpdatedAt();
+        $aFewSecondsAgo = new \DateTime('-3 seconds');
+
+        Assert::assertInstanceOf('\DateTime', $createdAt);
+        Assert::assertInstanceOf('\DateTime', $updatedAt);
+        Assert::assertGreaterThan($aFewSecondsAgo, $createdAt);
+        Assert::assertGreaterThan($aFewSecondsAgo, $updatedAt);
+    }
+
+    /**
+     * @When I wait for :numberOfSeconds seconds
+     * @param string $numberOfSeconds
+     */
+    public function iWaitForSeconds(string $numberOfSeconds)
+    {
+        sleep((integer) $numberOfSeconds);
+    }
+
+    /**
+     * @Then we have recorded that :username was updated after creation
+     */
+    public function weHaveRecordedThatWasUpdatedAfterCreation($username)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = $entityManager->getConnection();
+
+        $statement = $connection->prepare('SELECT created_at, updated_at FROM user WHERE username = :username');
+        $statement->bindValue('username', $username);
+        $statement->execute();
+
+        $datetimes = $statement->fetchAll()[0];
+
+        $createdAt = DateTime::createFromFormat('Y-m-d H:i:s', $datetimes['created_at']);
+        $updatedAt = DateTime::createFromFormat('Y-m-d H:i:s', $datetimes['updated_at']);
+
+        Assert::assertGreaterThan(
+            $createdAt->add(new \DateInterval('PT5S')),
+            $updatedAt
+        );
+    }
+
+    /**
+     * @Then the system should have recorded that the post :title was created and updated just now
+     * @param string $title
+     */
+    public function theSystemShouldHaveRecordedThatThePostWasCreatedAndUpdatedJustNow(string $title)
+    {
+        $post = $this->getPostByTitle($title);
+
+        Assert::assertInstanceOf('\AppBundle\Entity\Post', $post);
+
+        $this->assertMetaDatetimesForEntityCreatedJustNow($post);
+
+        $postRoleRepository = $this
+            ->getContainer()
+            ->get('doctrine')
+            ->getManager()
+            ->getRepository('AppBundle:PostRole');
+
+        $postRole = $postRoleRepository->findOneBy(['post' => $post]);
+        Assert::assertInstanceOf('\AppBundle\Entity\PostRole', $postRole);
+
+        $this->assertMetaDatetimesForEntityCreatedJustNow($postRole);
+    }
+
+    /**
+     * @Then the system has recorded that the post :title was updated after its creation
+     * @param string $title
+     */
+    public function theSystemHasRecordedThatThePostWasUpdatedAfterItsCreation(string $title)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = $entityManager->getConnection();
+
+        $statement = $connection->prepare('SELECT created_at, updated_at FROM post WHERE title = :title');
+        $statement->bindValue('title', $title);
+        $statement->execute();
+
+        $datetimes = $statement->fetchAll()[0];
+
+        $createdAt = DateTime::createFromFormat('Y-m-d H:i:s', $datetimes['created_at']);
+        $updatedAt = DateTime::createFromFormat('Y-m-d H:i:s', $datetimes['updated_at']);
+
+        Assert::assertInstanceOf('\DateTime', $createdAt);
+        Assert::assertInstanceOf('\DateTime', $updatedAt);
+        Assert::assertGreaterThan($createdAt, $updatedAt);
     }
 
     /**
@@ -449,5 +549,55 @@ class FeatureContext extends MinkContext implements Context
         $username = $user->getUsername();
 
         $this->assertElementOnPage("ul.nav li.active a[href='/$username']");
+    }
+
+    /**
+     * @param string $username
+     * @return User|null
+     */
+    private function getUserByUsername(string $username)
+    {
+        $userManager = $this->getContainer()->get('fos_user.user_manager');
+
+        return $userManager->findUserByUsername($username);
+    }
+
+    private function debug(): void
+    {
+        $html = $this->getSession()->getPage()->getHtml();
+        $currentUrl = $this->getSession()->getCurrentUrl();
+        dump($html);
+        dump($currentUrl);
+    }
+
+    /**
+     * @param string $title
+     * @return Post
+     */
+    private function getPostByTitle(string $title): Post
+    {
+        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
+
+        /** @var Post $post */
+        $post = $postRepository->findOneBy([
+            'title' => $title
+        ]);
+
+        return $post;
+    }
+
+    /**
+     * @param BaseEntity $entity
+     */
+    private function assertMetaDatetimesForEntityCreatedJustNow(BaseEntity $entity): void
+    {
+        $createdAt = $entity->getCreatedAt();
+        $updatedAt = $entity->getUpdatedAt();
+        $now = new \DateTime();
+        $fiveSecondsAgo = new \DateTime('-5 seconds');
+
+        Assert::assertGreaterThan($fiveSecondsAgo, $createdAt);
+        Assert::assertGreaterThanOrEqual($createdAt, $now);
+        Assert::assertEquals($createdAt, $updatedAt);
     }
 }

@@ -2,17 +2,16 @@
 
 namespace Application\Migrations;
 
+use AppBundle\Entity\User;
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
-use AppBundle\Repository\PostRepository;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
 
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20170416205804 extends AbstractMigration implements ContainerAwareInterface
+class Version20170422133920 extends AbstractMigration implements ContainerAwareInterface
 {
     /**
      * @var ContainerInterface
@@ -24,36 +23,30 @@ class Version20170416205804 extends AbstractMigration implements ContainerAwareI
      */
     public function up(Schema $schema)
     {
+        $userManager = $this->getContainer()->get('fos_user.user_manager');
+        $entityManager = $this->getContainer()->get('doctrine')->getManager();
 
-        $container = $this->getContainer();
-        $entityManager = $container->get('doctrine')->getManager();
-
-        /** @var PostRepository $postRepository */
-        $postRepository = $entityManager->getRepository('AppBundle:Post');
-
-        /**
-         * This try/catch-block proved necessary when a property (column) was later added to the Post entity.
-         * Running all the migrations from a blank database would then fail because a column was missing from Post,
-         * throwing exceptions. (This migration is run before the one adding the missing
-         * column – Version20170422124140.)
-         */
         try {
-            $posts = $postRepository->findAll();
+            /** @var User[] $users */
+            $users = $userManager->findUsers();
 
-            $postService = $container->get('app.post_service');
+            foreach ($users as $user) {
+                $now = new \DateTime();
 
-            foreach ($posts as $post) {
-                $post = $postService->setSlug(
-                    $postRepository->getOwner($post),
-                    $post
-                );
+                $user->setCreatedAt($now);
+                $user->setUpdatedAt($now);
 
-                $entityManager->persist($post);
+                $entityManager->persist($user);
                 $entityManager->flush();
             }
+
+
+
         } catch (\Exception $exception) {
 
         }
+
+
     }
 
     /**
@@ -64,7 +57,6 @@ class Version20170416205804 extends AbstractMigration implements ContainerAwareI
         // this down() migration is auto-generated, please modify it to your needs
 
     }
-
 
     /**
      * Sets the container.

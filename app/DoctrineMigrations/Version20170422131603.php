@@ -2,17 +2,17 @@
 
 namespace Application\Migrations;
 
+use AppBundle\Entity\Post;
+use AppBundle\Repository\PostRepository;
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
-use AppBundle\Repository\PostRepository;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
 
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20170416205804 extends AbstractMigration implements ContainerAwareInterface
+class Version20170422131603 extends AbstractMigration implements ContainerAwareInterface
 {
     /**
      * @var ContainerInterface
@@ -24,29 +24,20 @@ class Version20170416205804 extends AbstractMigration implements ContainerAwareI
      */
     public function up(Schema $schema)
     {
-
         $container = $this->getContainer();
         $entityManager = $container->get('doctrine')->getManager();
 
         /** @var PostRepository $postRepository */
         $postRepository = $entityManager->getRepository('AppBundle:Post');
 
-        /**
-         * This try/catch-block proved necessary when a property (column) was later added to the Post entity.
-         * Running all the migrations from a blank database would then fail because a column was missing from Post,
-         * throwing exceptions. (This migration is run before the one adding the missing
-         * column – Version20170422124140.)
-         */
         try {
+            /** @var Post[] $posts */
             $posts = $postRepository->findAll();
 
-            $postService = $container->get('app.post_service');
-
             foreach ($posts as $post) {
-                $post = $postService->setSlug(
-                    $postRepository->getOwner($post),
-                    $post
-                );
+                $now = new \DateTime();
+                $post->setCreatedAt($now);
+                $post->setUpdatedAt($now);
 
                 $entityManager->persist($post);
                 $entityManager->flush();
@@ -54,6 +45,7 @@ class Version20170416205804 extends AbstractMigration implements ContainerAwareI
         } catch (\Exception $exception) {
 
         }
+
     }
 
     /**
@@ -64,7 +56,6 @@ class Version20170416205804 extends AbstractMigration implements ContainerAwareI
         // this down() migration is auto-generated, please modify it to your needs
 
     }
-
 
     /**
      * Sets the container.

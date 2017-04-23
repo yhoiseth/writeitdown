@@ -15,6 +15,7 @@ Feature: New post
     And I press "Save"
     Then I should be redirected to "/writer/my-first-post/edit"
     And the response status code should be 200
+    And the system should have recorded that the post "My first post" was created and updated just now
 
     When I am on "/logout"
     And I am on "/writer/my-first-post/edit"

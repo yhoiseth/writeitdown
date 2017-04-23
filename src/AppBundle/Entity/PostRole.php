@@ -12,18 +12,9 @@ use AppBundle\Entity\User;
  * @ORM\Table(name="post_role")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PostRoleRepository")
  */
-class PostRole
+class PostRole extends BaseEntity
 {
     const TYPE_OWNER = 'owner';
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Post", inversedBy="roles")
@@ -45,16 +36,6 @@ class PostRole
      * @ORM\Column(name="type", type="string", length=255)
      */
     private $type;
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * @return \AppBundle\Entity\Post

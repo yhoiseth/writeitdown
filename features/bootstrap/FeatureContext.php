@@ -1,5 +1,6 @@
 <?php
 
+use AppBundle\Entity\BaseEntity;
 use AppBundle\Entity\Post;
 use AppBundle\Entity\PostRole;
 use AppBundle\Entity\User;
@@ -407,14 +408,18 @@ class FeatureContext extends MinkContext implements Context
 
         Assert::assertInstanceOf('\AppBundle\Entity\Post', $post);
 
-        $createdAt = $post->getCreatedAt();
-        $updatedAt = $post->getUpdatedAt();
-        $now = new \DateTime();
-        $fiveSecondsAgo = new \DateTime('-5 seconds');
+        $this->assertMetaDatetimesForEntityCreatedJustNow($post);
 
-        Assert::assertGreaterThan($fiveSecondsAgo, $createdAt);
-        Assert::assertGreaterThanOrEqual($createdAt, $now);
-        Assert::assertEquals($createdAt, $updatedAt);
+        $postRoleRepository = $this
+            ->getContainer()
+            ->get('doctrine')
+            ->getManager()
+            ->getRepository('AppBundle:PostRole');
+
+        $postRole = $postRoleRepository->findOneBy(['post' => $post]);
+        Assert::assertInstanceOf('\AppBundle\Entity\PostRole', $postRole);
+
+        $this->assertMetaDatetimesForEntityCreatedJustNow($postRole);
     }
 
     /**
@@ -579,5 +584,20 @@ class FeatureContext extends MinkContext implements Context
         ]);
 
         return $post;
+    }
+
+    /**
+     * @param BaseEntity $entity
+     */
+    private function assertMetaDatetimesForEntityCreatedJustNow(BaseEntity $entity): void
+    {
+        $createdAt = $entity->getCreatedAt();
+        $updatedAt = $entity->getUpdatedAt();
+        $now = new \DateTime();
+        $fiveSecondsAgo = new \DateTime('-5 seconds');
+
+        Assert::assertGreaterThan($fiveSecondsAgo, $createdAt);
+        Assert::assertGreaterThanOrEqual($createdAt, $now);
+        Assert::assertEquals($createdAt, $updatedAt);
     }
 }

@@ -1,4 +1,7 @@
-{{ form_start(form) }}
+{{ form_start(
+    form,
+    {'attr': {'data-autosave-url': path('post_autosave', {'id': post.id})}}
+) }}
     {{ form_widget(form) }}
 <input
         type="submit"

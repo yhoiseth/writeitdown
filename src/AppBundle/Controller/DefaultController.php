@@ -120,6 +120,23 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/system/post/autosave/{id}", name="post_autosave")
+     * @param Request $request
+     * @param string $id
+     * @return Response
+     */
+    public function autosavePostAction(Request $request, string $id)
+    {
+        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
+
+        $post = $postRepository->find($id);
+
+        $this->editPost($request, $post);
+
+        return new Response('success');
+    }
+
+    /**
      * @Route("/{username}/{slug}", name="post_show")
      * @param Request $request
      * @param string $slug
@@ -277,5 +294,21 @@ class DefaultController extends Controller
 
         $post = $postRepository->getPostBySlugAndOwner($slug, $owner);
         return $post;
+    }
+
+    /**
+     * @param Request $request
+     * @param Post $post
+     * @return Form
+     */
+    private function editPost(Request $request, Post $post): Form
+    {
+        $this->denyAccessUnlessGranted('edit', $post);
+
+        $form = $this->getForm($post);
+
+        $this->handlePostFormRequest($request, $form);
+
+        return $form;
     }
 }

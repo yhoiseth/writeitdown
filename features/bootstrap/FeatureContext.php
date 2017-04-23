@@ -180,6 +180,10 @@ class FeatureContext extends MinkContext implements Context
     {
         $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
 
+
+
+//        throw new PendingException();
+
         Assert::assertNull($postRepository->findOneBy([
             'title' => $this->getScenarioArgument('post')->getTitle(),
         ]));

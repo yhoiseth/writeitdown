@@ -6,6 +6,7 @@ Feature: New post
   Background:
     Given a user "writer"
 
+    @watch
   Scenario: Logged in, create one post
     Given I am logged in as "writer"
     And I am on the homepage
@@ -15,6 +16,7 @@ Feature: New post
 #    And I press "Save"
     Then I should be redirected to "/writer/untitled/edit"
     And the response status code should be 200
+    And I wait for "1" seconds
     And the system should have recorded that the post "Untitled" was created and updated just now
 
     When I click the "New post" link
@@ -23,7 +25,7 @@ Feature: New post
     And the system should have recorded that the post with slug "untitled-2" was created and updated just now
 
     When I visit "/logout"
-    And I visit "/writer/my-first-post/edit"
+    And I visit "/writer/untitled/edit"
     Then I should be redirected to "/login"
 
 #  Scenario: Logged in, colliding slugs

@@ -24,7 +24,6 @@ Feature: Navigation
 
     Examples:
       | path                             | title                                       |
-      | /                                | Home \|                                     |
       | /profile                         |                                             |
       | /profile/edit                    |                                             |
       | /profile/change-password         |                                             |

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Stringy\Stringy;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -133,10 +134,16 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        return $this->render('default/index.html.twig', [
-            'posts' => $this->getPostsICanView(),
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-        ]);
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            /** @var User $user */
+            $user = $this->getUser();
+
+            return $this->redirectToRoute('profile', [
+                'username' => $user->getUsernameCanonical()
+            ]);
+        }
+
+        return $this->render('default/index.html.twig');
     }
 
     /**

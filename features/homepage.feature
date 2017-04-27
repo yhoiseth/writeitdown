@@ -1,5 +1,12 @@
 Feature: Homepage
 
-  Scenario: Visit the homepage
+  Scenario: Not logged in
     Given I am on the homepage
     Then I should see "Write it down"
+    And I should see "Log in or register"
+
+  Scenario: Logged in
+    Given I am logged in as "john"
+    When I visit "/"
+    Then I should be redirected to "/john"
+

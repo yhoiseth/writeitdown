@@ -269,6 +269,10 @@ class FeatureContext extends MinkContext implements Context
      */
     public function iAmLoggedInAs(string $username)
     {
+        if (!$this->getUserByUsername($username)) {
+            $this->aUser($username);
+        }
+
         $this->login($username, $username);
     }
 

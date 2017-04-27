@@ -5,11 +5,20 @@
 {% endblock %}
 
 {% block body %}
-    <ul>
-        {% for post in posts %}
-            <li>
-                {{ post.title }}
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="jumbotron">
+        <h1>
+            Write it down
+        </h1>
+        <p>
+            Use Markdown to make notes.
+        </p>
+        <p>
+            <a
+                    class="btn btn-primary btn-lg"
+                    href="{{ path('fos_user_security_login') }}"
+            >
+                Log in or register
+            </a>
+        </p>
+    </div>
 {% endblock %}

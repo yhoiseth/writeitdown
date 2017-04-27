@@ -448,6 +448,38 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
+     * @Then the system should have recorded that the post with slug :slug was created and updated just now
+     * @param string $slug
+     */
+    public function theSystemShouldHaveRecordedThatThePostWithSlugWasCreatedAndUpdatedJustNow(string $slug)
+    {
+        $post = $this->findPostBySlug($slug);
+
+        Assert::assertInstanceOf('\AppBundle\Entity\Post', $post);
+
+        $this->assertMetaDatetimesForEntityCreatedJustNow($post);
+
+        $postRoleRepository = $this
+            ->getContainer()
+            ->get('doctrine')
+            ->getManager()
+            ->getRepository('AppBundle:PostRole');
+
+        $postRole = $postRoleRepository->findOneBy(['post' => $post]);
+        Assert::assertInstanceOf('\AppBundle\Entity\PostRole', $postRole);
+
+        $this->assertMetaDatetimesForEntityCreatedJustNow($postRole);
+    }
+
+    /**
+     * @When I visit :path
+     */
+    public function iVisit($path)
+    {
+        $this->visit($path);
+    }
+
+    /**
      * @return array
      */
     private function getScenarioArguments(): array
@@ -599,5 +631,21 @@ class FeatureContext extends MinkContext implements Context
         Assert::assertGreaterThan($fiveSecondsAgo, $createdAt);
         Assert::assertGreaterThanOrEqual($createdAt, $now);
         Assert::assertEquals($createdAt, $updatedAt);
+    }
+
+    /**
+     * @param string $slug
+     * @return Post
+     */
+    private function findPostBySlug(string $slug)
+    {
+        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
+
+        /** @var Post $post */
+        $post = $postRepository->findOneBy([
+            'slug' => $slug
+        ]);
+
+        return $post;
     }
 }

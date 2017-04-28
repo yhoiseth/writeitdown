@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Stringy\Stringy;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -28,40 +29,28 @@ class DefaultController extends Controller
 
         $this->denyAccessUnlessGranted('new', $post);
 
-        $form = $this->getForm($post);
+        $post->setTitle('Untitled');
 
-        $form->handleRequest($request);
+        $slug = $this->get('slugify')->slugify($post->getTitle());
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var Post $post */
-            $post = $form->getData();
+        $doctrine = $this->getDoctrine();
+        $entityManager = $doctrine->getManager();
 
-            $slug = $this->get('slugify')->slugify($post->getTitle());
-
-            $doctrine = $this->getDoctrine();
-            $entityManager = $doctrine->getManager();
-
-            while ($this->userOwnsPostWithSameSlug($slug)) {
-                $slug = $this->incrementSlug($slug);
-            }
-
-
-            $post->setSlug($slug);
-
-            $entityManager->persist($post);
-            $entityManager->flush();
-
-            $postRepository = $doctrine->getRepository('AppBundle:Post');
-            $postRepository->addRole(PostRole::TYPE_OWNER, $post, $this->getUser());
-
-            return $this->redirectToRoute('post_edit', [
-                'username' => $this->getUser()->getUsername(),
-                'slug' => $post->getSlug(),
-            ]);
+        while ($this->userOwnsPostWithSameSlug($slug)) {
+            $slug = $this->incrementSlug($slug);
         }
 
-        return $this->render('AppBundle:Post:new.html.twig', [
-            'form' => $form->createView(),
+        $post->setSlug($slug);
+
+        $entityManager->persist($post);
+        $entityManager->flush();
+
+        $postRepository = $doctrine->getRepository('AppBundle:Post');
+        $postRepository->addRole(PostRole::TYPE_OWNER, $post, $this->getUser());
+
+        return $this->redirectToRoute('post_edit', [
+            'username' => $this->getUser()->getUsername(),
+            'slug' => $post->getSlug(),
         ]);
     }
 
@@ -171,10 +160,16 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        return $this->render('default/index.html.twig', [
-            'posts' => $this->getPostsICanView(),
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-        ]);
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            /** @var User $user */
+            $user = $this->getUser();
+
+            return $this->redirectToRoute('profile', [
+                'username' => $user->getUsernameCanonical()
+            ]);
+        }
+
+        return $this->render('default/index.html.twig');
     }
 
     /**

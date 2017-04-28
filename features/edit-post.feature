@@ -24,7 +24,8 @@ Feature: Edit post
     And I am on the edit page for "Editor's existing post"
     Then the response status code should be 403
 
-  Scenario: Colliding slugs
+#  Scenario: Colliding slugs
+  Scenario: Colliding slugs with other user
     Given a user "bob"
     And a user "alice"
     And that "bob" has a post with title "Post" and body "Written by Bob"

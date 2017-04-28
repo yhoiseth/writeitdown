@@ -12,19 +12,19 @@ Feature: Edit post
   Scenario: My post
     Given I am logged in as "editor"
     And I am on the edit page for "Editor's existing post"
+    Then I should see "Post saved"
     When I fill in "Title" with "My old post has now been edited"
     And I fill in "Body" with "Whatever's on my mind"
     And I wait for "1" seconds
-#    And I press "Save"
     Then the title is updated to "My old post has now been edited"
     And the system has recorded that the post "My old post has now been edited" was updated after its creation
+    And I should see "Post saved"
 
   Scenario: Someone else's post
     Given I am logged in as "malicious"
     And I am on the edit page for "Editor's existing post"
     Then the response status code should be 403
 
-#  Scenario: Colliding slugs
   Scenario: Colliding slugs with other user
     Given a user "bob"
     And a user "alice"

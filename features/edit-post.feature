@@ -15,14 +15,10 @@ Feature: Edit post
     Then I should see "Your changes are saved automatically every 10 seconds"
     When I fill in "Title" with "My old post has now been edited"
     And I fill in "Body" with "Whatever's on my mind"
-#    And I wait for "13" seconds
-#    Then the title is updated to "My old post has now been edited"
-#    And the system has recorded that the post "My old post has now been edited" was updated after its creation
-#    And I should see "Your changes are saved automatically every 10 seconds"
-
-    When the server goes down
-#    And I wait for "11" seconds
-#    Then I should see "Cannot connect to server. Your changes are not saved automatically. Check your internet connection or contact us for help."
+    And I wait for "13" seconds
+    Then the title is updated to "My old post has now been edited"
+    And the system has recorded that the post "My old post has now been edited" was updated after its creation
+    And I should see "Your changes are saved automatically every 10 seconds"
 
   Scenario: Someone else's post
     Given I am logged in as "malicious"

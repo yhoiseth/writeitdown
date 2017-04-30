@@ -54,16 +54,6 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @AfterScenario
-     */
-    public function startWebServer()
-    {
-        if ($this->getScenarioArgument('webServerHasBeenStopped')) {
-            exec('bin/console server:start --force');
-        }
-    }
-
-    /**
      * @Given a user :username
      * @param string $username
      */
@@ -189,10 +179,6 @@ class FeatureContext extends MinkContext implements Context
     public function theTitleIsUpdatedTo($editedTitle)
     {
         $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
-
-        dump($this->getScenarioArgument('post'));
-
-//        throw new PendingException();
 
         Assert::assertNull($postRepository->findOneBy([
             'title' => $this->getScenarioArgument('post')->getTitle(),
@@ -542,7 +528,7 @@ class FeatureContext extends MinkContext implements Context
     {
         $scenarioArguments = $this->getScenarioArguments();
 
-        if (!key_exists('webServerHasBeenStopped', $this->getScenarioArguments())) {
+        if (!key_exists($key, $this->getScenarioArguments())) {
             return null;
         }
 

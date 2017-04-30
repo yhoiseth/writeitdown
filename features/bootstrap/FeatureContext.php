@@ -156,17 +156,17 @@ class FeatureContext extends MinkContext implements Context
 
     /**
      * @Given I am on the edit page for :postTitle
+     * @param string $postTitle
      */
-    public function iAmOnTheEditPageFor($postTitle)
+    public function iAmOnTheEditPageFor(string $postTitle)
     {
         /** @var PostRepository $postRepository */
         $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
 
         /** @var Post $post */
-        $post = $postRepository
-            ->findOneBy([
-                'title' => $postTitle,
-        ]);
+        $post = $postRepository->findAll()[0];
+
+        Assert::assertEquals($postTitle, $post->getTitle());
 
         $owner = $postRepository->getOwner($post);
 

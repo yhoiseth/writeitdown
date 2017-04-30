@@ -54,6 +54,16 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
+     * @AfterScenario
+     */
+    public function startWebServer()
+    {
+        if ($this->getScenarioArgument('webServerHasBeenStopped')) {
+            exec('bin/console server:start --force');
+        }
+    }
+
+    /**
      * @Given a user :username
      * @param string $username
      */
@@ -180,7 +190,7 @@ class FeatureContext extends MinkContext implements Context
     {
         $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
 
-
+        dump($this->getScenarioArgument('post'));
 
 //        throw new PendingException();
 
@@ -488,6 +498,16 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
+     * @When the server goes down
+     */
+    public function theServerGoesDown()
+    {
+        exec('bin/console server:stop');
+
+        $this->setScenarioArgument('webServerHasBeenStopped', true);
+    }
+
+    /**
      * @return array
      */
     private function getScenarioArguments(): array
@@ -520,7 +540,13 @@ class FeatureContext extends MinkContext implements Context
      */
     private function getScenarioArgument(string $key)
     {
-        $value = $this->getScenarioArguments()[$key];
+        $scenarioArguments = $this->getScenarioArguments();
+
+        if (!key_exists('webServerHasBeenStopped', $this->getScenarioArguments())) {
+            return null;
+        }
+
+        $value = $scenarioArguments[$key];
 
         return $value;
     }

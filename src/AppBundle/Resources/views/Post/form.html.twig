@@ -8,9 +8,12 @@
 {% endif %}
 
     {{ form_widget(form) }}
+<p id="autosave-alert">
+    Your changes are saved automatically every 10 seconds.
+</p>
 <input
         type="submit"
-        value="Save"
+        value="Save immediately"
         class="btn btn-default"
 >
 {{ form_end(form) }}

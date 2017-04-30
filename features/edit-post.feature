@@ -12,13 +12,17 @@ Feature: Edit post
   Scenario: My post
     Given I am logged in as "editor"
     And I am on the edit page for "Editor's existing post"
-    Then I should not see "All changes saved in database"
+    Then I should see "Your changes are saved automatically every 10 seconds"
     When I fill in "Title" with "My old post has now been edited"
     And I fill in "Body" with "Whatever's on my mind"
-    And I wait for "1" seconds
-    Then the title is updated to "My old post has now been edited"
-    And the system has recorded that the post "My old post has now been edited" was updated after its creation
-    And I should see "All changes saved in database"
+#    And I wait for "13" seconds
+#    Then the title is updated to "My old post has now been edited"
+#    And the system has recorded that the post "My old post has now been edited" was updated after its creation
+#    And I should see "Your changes are saved automatically every 10 seconds"
+
+    When the server goes down
+#    And I wait for "11" seconds
+#    Then I should see "Cannot connect to server. Your changes are not saved automatically. Check your internet connection or contact us for help."
 
   Scenario: Someone else's post
     Given I am logged in as "malicious"

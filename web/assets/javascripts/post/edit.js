@@ -10,9 +10,11 @@ $(document).ready(function () {
 
     var jqxhr = $.post(url, serializedForm, function(response) {
       $autosaveAlert.html('Your changes are saved automatically every 10 seconds.');
+      $autosaveAlert.addClass('alert-info');
     })
       .fail(function() {
         $autosaveAlert.html('Cannot connect to server. Your changes are not saved automatically. Check your internet connection or contact us for help.');
+        $autosaveAlert.addClass('alert-danger');
       })
   };
 

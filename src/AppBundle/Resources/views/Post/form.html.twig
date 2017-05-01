@@ -20,4 +20,15 @@
         value="Save immediately"
         class="btn btn-default"
 >
+<a
+        href="{{ path(
+            'post_slug_edit',
+            {
+                'username': username,
+                'slug': post.slug,
+            }
+        ) }}"
+>
+    Edit slug
+</a>
 {{ form_end(form) }}

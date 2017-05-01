@@ -60,7 +60,20 @@ class FeatureContext extends MinkContext implements Context
      */
     public function iHaveAPostWithTitleAndSlug(string $title, string $slug)
     {
-        throw new PendingException();
+        $postService = $this->getContainer()->get('app.post_service');
+        $post = $postService->createPost(
+            $this->getScenarioArgument('user'),
+            $title,
+            'Something for the body'
+        );
+
+        if ($post->getSlug() !== $slug) {
+            $post->setSlug($slug);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($post);
+            $entityManager->flush();
+        }
     }
 
     /**

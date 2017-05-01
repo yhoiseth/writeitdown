@@ -173,6 +173,16 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/{username}/{slug}/slug/edit", name="post_slug_edit")
+     * @param string $username
+     * @param string $slug
+     */
+    public function editPostSlug(string $username, string $slug)
+    {
+
+    }
+
+    /**
      * @param string $slug
      * @return bool
      */

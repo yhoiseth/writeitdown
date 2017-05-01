@@ -191,7 +191,20 @@ class DefaultController extends Controller
 
         $form = $this->createForm(SlugType::class, $post);
 
-        $this->handlePostFormRequest($request, $form, $post);
+        $form->handleRequest($request);
+
+        if ($form->isValid() && $form->isSubmitted()) {
+            $post = $form->getData();
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($post);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'Slug updated'
+            );
+        }
 
         return $this->render('@App/Post/slug/edit.html.twig', [
             'post' => $post,

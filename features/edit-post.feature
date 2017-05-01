@@ -8,7 +8,7 @@ Feature: Edit post
     And a user "malicious"
     And that "editor" has a post with title "Editor's existing post"
 
-    @watch @javascript
+  @javascript
   Scenario: My post
     Given I am logged in as "editor"
     And I am on the edit page for "Editor's existing post"

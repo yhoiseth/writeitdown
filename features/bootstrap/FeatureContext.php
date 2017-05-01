@@ -54,6 +54,45 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
+     * @Given I have a post with title :title and slug :slug
+     * @param string $title
+     * @param string $slug
+     */
+    public function iHaveAPostWithTitleAndSlug(string $title, string $slug)
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Given :username has a post with slug :slug
+     * @param string $username
+     * @param string $slug
+     */
+    public function hasAPostWithSlug(string $username, string $slug)
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then the post that used to have the slug :oldSlug should now have the slug :newSlug
+     * @param string $oldSlug
+     * @param string $newSlug
+     */
+    public function thePostThatUsedToHaveTheSlugShouldNowHaveTheSlug(string $oldSlug, string $newSlug)
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then the post with slug :slug should not have been changed
+     * @param string $slug
+     */
+    public function thePostWithSlugShouldNotHaveBeenChanged(string $slug)
+    {
+        throw new PendingException();
+    }
+
+    /**
      * @Given a user :username
      * @param string $username
      */

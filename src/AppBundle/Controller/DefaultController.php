@@ -187,7 +187,7 @@ class DefaultController extends Controller
             $slug
         );
 
-//        $this->denyAccessUnlessGranted('edit', $post);
+        $this->denyAccessUnlessGranted('edit', $post);
 
         $form = $this->createForm(SlugType::class, $post);
 

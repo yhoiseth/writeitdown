@@ -156,17 +156,17 @@ class FeatureContext extends MinkContext implements Context
 
     /**
      * @Given I am on the edit page for :postTitle
+     * @param string $postTitle
      */
-    public function iAmOnTheEditPageFor($postTitle)
+    public function iAmOnTheEditPageFor(string $postTitle)
     {
         /** @var PostRepository $postRepository */
         $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
 
         /** @var Post $post */
-        $post = $postRepository
-            ->findOneBy([
-                'title' => $postTitle,
-        ]);
+        $post = $postRepository->findAll()[0];
+
+        Assert::assertEquals($postTitle, $post->getTitle());
 
         $owner = $postRepository->getOwner($post);
 
@@ -484,6 +484,16 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
+     * @When the server goes down
+     */
+    public function theServerGoesDown()
+    {
+        exec('bin/console server:stop');
+
+        $this->setScenarioArgument('webServerHasBeenStopped', true);
+    }
+
+    /**
      * @return array
      */
     private function getScenarioArguments(): array
@@ -516,7 +526,13 @@ class FeatureContext extends MinkContext implements Context
      */
     private function getScenarioArgument(string $key)
     {
-        $value = $this->getScenarioArguments()[$key];
+        $scenarioArguments = $this->getScenarioArguments();
+
+        if (!key_exists($key, $this->getScenarioArguments())) {
+            return null;
+        }
+
+        $value = $scenarioArguments[$key];
 
         return $value;
     }

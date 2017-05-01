@@ -6,6 +6,7 @@ use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Stringy\Stringy;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Post;
@@ -99,13 +100,38 @@ class DefaultController extends Controller
 
         $form = $this->getForm($post);
 
-        $this->handlePostFormRequest($request, $form);
+        $post = $this->handlePostFormRequest($request, $form, $post);
 
         return $this->render('AppBundle:Post:edit.html.twig', [
             'form' => $form->createView(),
             'username' => $username,
             'post' => $post,
         ]);
+    }
+
+    /**
+     * @Route("/system/post/autosave/{id}", name="post_autosave")
+     * @param Request $request
+     * @param string $id
+     * @return Response
+     */
+    public function autosavePostAction(Request $request, string $id)
+    {
+        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
+
+        $post = $postRepository->find($id);
+
+        $this->denyAccessUnlessGranted('edit', $post);
+
+        $form = $this->getForm($post);
+
+        $post = $this->handlePostFormRequest($request, $form, $post);
+
+        return new JsonResponse(
+            json_encode([
+                'updatedAt' => $post->getUpdatedAt()
+            ])
+        );
     }
 
     /**
@@ -213,18 +239,24 @@ class DefaultController extends Controller
     /**
      * @param Request $request
      * @param Form $form
-     * @return void
+     * @param Post $post
+     * @return Post
      */
-    private function handlePostFormRequest(Request $request, Form $form): void
+    private function handlePostFormRequest(Request $request, Form $form, Post $post)
     {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Post $post */
             $post = $form->getData();
+
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($post);
             $entityManager->flush();
         }
+
+        return $post;
     }
 
     /**

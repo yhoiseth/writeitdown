@@ -9,3 +9,8 @@
     {% include 'AppBundle:Post:form.html.twig' %}
 
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/javascripts/post/edit.js') }}"></script>
+{% endblock %}

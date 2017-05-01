@@ -1,8 +1,23 @@
-{{ form_start(form) }}
+{% if post is defined %}
+    {{ form_start(
+        form,
+        {'attr': {'data-autosave-url': path('post_autosave', {'id': post.id})}}
+    ) }}
+{% else %}
+    {{ form_start(form) }}
+{% endif %}
+
     {{ form_widget(form) }}
+<div
+        id="autosave-alert"
+        class="alert alert-info"
+        role="alert"
+>
+    Your changes are saved automatically every 10 seconds.
+</div>
 <input
         type="submit"
-        value="Save"
+        value="Save immediately"
         class="btn btn-default"
 >
 {{ form_end(form) }}

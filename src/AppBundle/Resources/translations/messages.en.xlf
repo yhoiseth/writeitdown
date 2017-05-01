@@ -10,6 +10,10 @@
                 <source>Body</source>
                 <target>Body</target>
             </trans-unit>
+            <trans-unit id="Slug">
+                <source>Slug</source>
+                <target>Slug</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

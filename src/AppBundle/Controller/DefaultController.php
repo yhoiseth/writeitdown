@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Form\Post\SlugType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Stringy\Stringy;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -174,12 +175,29 @@ class DefaultController extends Controller
 
     /**
      * @Route("/{username}/{slug}/slug/edit", name="post_slug_edit")
+     * @param Request $request
      * @param string $username
      * @param string $slug
+     * @return Response
      */
-    public function editPostSlug(string $username, string $slug)
+    public function editPostSlug(Request $request, string $username, string $slug)
     {
+        $post = $this->getPostBySlugAndOwner(
+            $username,
+            $slug
+        );
 
+//        $this->denyAccessUnlessGranted('edit', $post);
+
+        $form = $this->createForm(SlugType::class, $post);
+
+        $this->handlePostFormRequest($request, $form, $post);
+
+        return $this->render('@App/Post/slug/edit.html.twig', [
+            'post' => $post,
+            'form' => $form->createView(),
+            'username' => $username,
+        ]);
     }
 
     /**

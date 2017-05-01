@@ -1,0 +1,16 @@
+{% extends 'FOSUserBundle::layout.html.twig' %}
+
+{% block title %}
+    {{ post.title }} | Editing slug | {{ username }} {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <input
+            type="submit"
+            value="Save"
+            class="btn btn-default"
+    >
+    {{ form_end(form) }}
+{% endblock %}

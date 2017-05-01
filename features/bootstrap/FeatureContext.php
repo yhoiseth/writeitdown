@@ -103,7 +103,19 @@ class FeatureContext extends MinkContext implements Context
      */
     public function thePostThatUsedToHaveTheSlugShouldNowHaveTheSlug(string $oldSlug, string $newSlug)
     {
-        throw new PendingException();
+        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
+
+        $oldPost = $postRepository->findOneBy([
+            'slug' => $oldSlug,
+        ]);
+
+        Assert::assertNull($oldPost);
+
+        $newPost = $postRepository->findOneBy([
+            'slug' => $newSlug,
+        ]);
+
+        Assert::assertInstanceOf('\AppBundle\Entity\Post', $newPost);
     }
 
     /**

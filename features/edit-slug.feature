@@ -36,3 +36,17 @@ Feature: Edit slug
     And "other-slugger" has a post with slug "popular-slug"
     When I visit "other-slugger/popular-slug/slug/edit"
     Then the response status code should be 403
+
+  Scenario Outline: Invalid characters
+    Given I have a post with title "Untitled" and slug "untitled"
+    And I visit "/"
+    And I click the "Untitled" link
+    And I click the "Edit slug" link
+    And I should be redirected to "/slugger/untitled/slug/edit"
+    And I fill in "Slug" with "<input>"
+    Then the post that used to have the slug "input" should now have the slug "output"
+
+    Examples:
+      | input       | output      |
+      | white space | white-space |
+      | UPPERCASE   | uppercase   |

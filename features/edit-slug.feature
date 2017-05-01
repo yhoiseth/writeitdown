@@ -1,4 +1,3 @@
-@watch
 Feature: Edit slug
   In order to make my post URLs look better
   As a web user
@@ -16,16 +15,19 @@ Feature: Edit slug
     And I fill in "Slug" with "popular-slug"
     And I press "Save"
     Then the post that used to have the slug "untitled" should now have the slug "popular-slug"
+    And I should be redirected to "/slugger/popular-slug/edit"
     And I should see "Slug updated"
 
+  @watch
   Scenario: Colliding slug with own post
     Given I have a post with title "Untitled" and slug "untitled"
+    And I have a post with title "Other slugger post" and slug "other-slugger-post"
     And I visit "/"
     And I click the "Untitled" link
     And I click the "Edit slug" link
-    And I should be redirected to "/slugger/untitled/slug/edit"
-    And I have a post with title "Other slugger post" and slug "other-slugger-post"
+    Then I should be redirected to "/slugger/untitled/slug/edit"
     When I fill in "Slug" with "other-slugger-post"
+    And I press "Save"
     Then I should see "You have to choose a unique slug"
     And the post with slug "other-slugger-post" should not have been changed
 

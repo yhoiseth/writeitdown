@@ -56,9 +56,9 @@ class PostRepository extends EntityRepository
     /**
      * @param string $slug
      * @param User $owner
-     * @return Post
+     * @return Post|null
      */
-    public function getPostBySlugAndOwner(string $slug, User $owner): Post
+    public function getPostBySlugAndOwner(string $slug, User $owner)
     {
         return $this
             ->createQueryBuilder('post')

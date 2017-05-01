@@ -194,6 +194,7 @@ class DefaultController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid() && $form->isSubmitted()) {
+            /** @var Post $post */
             $post = $form->getData();
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -204,6 +205,11 @@ class DefaultController extends Controller
                 'success',
                 'Slug updated'
             );
+
+            return $this->redirectToRoute('post_edit', [
+                'username' => $username,
+                'slug' => $post->getSlug(),
+            ]);
         }
 
         return $this->render('@App/Post/slug/edit.html.twig', [
@@ -335,15 +341,16 @@ class DefaultController extends Controller
     /**
      * @param string $username
      * @param string $slug
-     * @return Post
+     * @return Post|null
      */
-    private function getPostBySlugAndOwner(string $username, string $slug): Post
+    private function getPostBySlugAndOwner(string $username, string $slug)
     {
         $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
 
         $owner = $this->get('fos_user.user_manager')->findUserByUsername($username);
 
         $post = $postRepository->getPostBySlugAndOwner($slug, $owner);
+
         return $post;
     }
 }

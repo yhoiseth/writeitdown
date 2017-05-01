@@ -83,7 +83,17 @@ class FeatureContext extends MinkContext implements Context
      */
     public function hasAPostWithSlug(string $username, string $slug)
     {
-        throw new PendingException();
+        $user = $this->getUserByUsername($username);
+
+        $post = $this
+            ->getContainer()
+            ->get('app.post_service')
+            ->createPost(
+                $user,
+                $slug,
+                $slug
+            )
+        ;
     }
 
     /**

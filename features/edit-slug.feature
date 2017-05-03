@@ -18,7 +18,6 @@ Feature: Edit slug
     And I should be redirected to "/slugger/popular-slug/edit"
     And I should see "Slug updated"
 
-  @watch
   Scenario: Colliding slug with own post
     Given I have a post with title "Untitled" and slug "untitled"
     And I have a post with title "Other slugger post" and slug "other-slugger-post"
@@ -43,7 +42,8 @@ Feature: Edit slug
     And I click the "Edit slug" link
     And I should be redirected to "/slugger/untitled/slug/edit"
     And I fill in "Slug" with "<input>"
-    Then the post that used to have the slug "input" should now have the slug "output"
+    And I press "Save"
+    Then the post that used to have the slug "untitled" should now have the slug "<output>"
 
     Examples:
       | input       | output      |

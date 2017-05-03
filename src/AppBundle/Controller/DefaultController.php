@@ -197,6 +197,14 @@ class DefaultController extends Controller
             /** @var Post $post */
             $post = $form->getData();
 
+            $post->setSlug(
+                $this
+                    ->get('slugify')
+                    ->slugify(
+                        $post->getSlug()
+                    )
+            );
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($post);
             $entityManager->flush();

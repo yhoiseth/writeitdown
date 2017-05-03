@@ -29,7 +29,6 @@ Feature: Edit slug
     When I fill in "Slug" with "other-slugger-post"
     And I press "Save"
     Then I should see "You have to choose a unique slug"
-    And the post with slug "other-slugger-post" should not have been changed
 
   Scenario: Other user's post
     Given a user "other-slugger"

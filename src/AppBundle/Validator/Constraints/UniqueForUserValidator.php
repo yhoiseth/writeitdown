@@ -3,6 +3,7 @@
 namespace AppBundle\Validator\Constraints;
 
 
+use AppBundle\Entity\Post;
 use AppBundle\Service\PostService;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\DependencyInjection\Container;
@@ -37,7 +38,10 @@ class UniqueForUserValidator extends ConstraintValidator
         /** @var PostService $postService */
         $postService = $this->get('app.post_service');
 
-        $userOwnsPostWithSameSlug = $postService->userOwnsPostWithSameSlug($user, $value);
+        /** @var Post $post */
+        $post = $this->context->getObject();
+
+        $userOwnsPostWithSameSlug = $postService->userOwnsPostWithSameSlug($user, $value, $post);
 
         if ($userOwnsPostWithSameSlug) {
             $this->context

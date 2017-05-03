@@ -305,7 +305,6 @@ class DefaultController extends Controller
             /** @var Post $post */
             $post = $form->getData();
 
-
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($post);
             $entityManager->flush();

@@ -568,6 +568,24 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
+     * @When the sessions are deleted
+     */
+    public function theSessionsAreDeleted()
+    {
+        $sessionSavePathForCurrentEnvironment = $this->getContainer()->getParameter('session.save_path');
+
+        $sessionSavePathForAllEnvironments = substr(
+            $sessionSavePathForCurrentEnvironment,
+            0,
+            strrpos( $sessionSavePathForCurrentEnvironment, '/')
+        );
+
+        $commandToRemoveAllSessions = "rm -rf $sessionSavePathForAllEnvironments/*";
+
+        exec($commandToRemoveAllSessions);
+    }
+
+    /**
      * @return array
      */
     private function getScenarioArguments(): array

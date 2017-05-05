@@ -11,7 +11,6 @@ Feature: Login
     And I press "Log in"
     Then I am logged in
 
-    @watch
   Scenario: Remember me
     Given a user "elephant"
     And I am on "/login"

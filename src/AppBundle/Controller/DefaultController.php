@@ -161,7 +161,7 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             /** @var User $user */
             $user = $this->getUser();
 
@@ -254,30 +254,6 @@ class DefaultController extends Controller
         }
 
         return false;
-    }
-
-    /**
-     * @return array
-     */
-    private function getPostsICanView(): array
-    {
-        $postsICanView = [];
-
-        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $postsICanView;
-        }
-
-        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
-
-        $allPosts = $postRepository->findAll();
-
-        foreach ($allPosts as $post) {
-            if ($this->isGranted('show', $post)) {
-                $postsICanView[] = $post;
-            }
-        }
-
-        return $postsICanView;
     }
 
     /**

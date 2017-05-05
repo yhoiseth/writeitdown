@@ -21,4 +21,5 @@ Feature: Login
     And I press "Log in"
     Then I am logged in
     When the sessions are deleted
+    And I visit "/"
     Then I am logged in

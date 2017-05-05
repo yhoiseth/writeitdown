@@ -742,4 +742,12 @@ class FeatureContext extends MinkContext implements Context
 
         return $post;
     }
+
+    /**
+     * @When the sessions are deleted
+     */
+    public function theSessionsAreDeleted()
+    {
+        throw new PendingException();
+    }
 }

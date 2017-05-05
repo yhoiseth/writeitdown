@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Form\Post\SlugType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Stringy\Stringy;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -173,6 +174,60 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/{username}/{slug}/slug/edit", name="post_slug_edit")
+     * @param Request $request
+     * @param string $username
+     * @param string $slug
+     * @return Response
+     */
+    public function editPostSlug(Request $request, string $username, string $slug)
+    {
+        $post = $this->getPostBySlugAndOwner(
+            $username,
+            $slug
+        );
+
+        $this->denyAccessUnlessGranted('edit', $post);
+
+        $form = $this->createForm(SlugType::class, $post);
+
+        $form->handleRequest($request);
+
+        if ($form->isValid() && $form->isSubmitted()) {
+            /** @var Post $post */
+            $post = $form->getData();
+
+            $post->setSlug(
+                $this
+                    ->get('slugify')
+                    ->slugify(
+                        $post->getSlug()
+                    )
+            );
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($post);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'Slug updated'
+            );
+
+            return $this->redirectToRoute('post_edit', [
+                'username' => $username,
+                'slug' => $post->getSlug(),
+            ]);
+        }
+
+        return $this->render('@App/Post/slug/edit.html.twig', [
+            'post' => $post,
+            'form' => $form->createView(),
+            'username' => $username,
+        ]);
+    }
+
+    /**
      * @param string $slug
      * @return bool
      */
@@ -250,7 +305,6 @@ class DefaultController extends Controller
             /** @var Post $post */
             $post = $form->getData();
 
-
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($post);
             $entityManager->flush();
@@ -294,15 +348,16 @@ class DefaultController extends Controller
     /**
      * @param string $username
      * @param string $slug
-     * @return Post
+     * @return Post|null
      */
-    private function getPostBySlugAndOwner(string $username, string $slug): Post
+    private function getPostBySlugAndOwner(string $username, string $slug)
     {
         $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
 
         $owner = $this->get('fos_user.user_manager')->findUserByUsername($username);
 
         $post = $postRepository->getPostBySlugAndOwner($slug, $owner);
+
         return $post;
     }
 }

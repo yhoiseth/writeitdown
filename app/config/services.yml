@@ -15,3 +15,10 @@ services:
         arguments:
             - "@doctrine.orm.default_entity_manager"
             - "@slugify"
+
+    app.unique_for_user_validator:
+        class: AppBundle\Validator\Constraints\UniqueForUserValidator
+        arguments:
+            - "@service_container"
+        tags:
+            - { name: validator.constraint_validator }

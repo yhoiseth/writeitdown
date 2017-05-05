@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\PostRole;
+use AppBundle\Validator\Constraints as AppAssert;
 
 /**
  * Post
@@ -40,6 +41,7 @@ class Post extends BaseEntity
      * @var string
      *
      * @ORM\Column(type="string")
+     * @AppAssert\UniqueForUser
      */
     private $slug;
 

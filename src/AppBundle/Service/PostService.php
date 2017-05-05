@@ -65,9 +65,10 @@ class PostService
     /**
      * @param User $user
      * @param string $slug
+     * @param Post $currentPost
      * @return bool
      */
-    public function userOwnsPostWithSameSlug(User $user, string $slug): bool
+    public function userOwnsPostWithSameSlug(User $user, string $slug, Post $currentPost): bool
     {
         $entityManager = $this->getEntityManager();
 
@@ -85,11 +86,24 @@ class PostService
 
         $postsOwnedByUserWithSameSlug = $queryForPostsOwnedByUserWithSameSlug->getResult();
 
-        if (count($postsOwnedByUserWithSameSlug) > 0) {
+        $numberOfPostsOwnedByUserWithSameSlug = count($postsOwnedByUserWithSameSlug);
+
+        if ($numberOfPostsOwnedByUserWithSameSlug === 0) {
+            return false;
+        }
+
+        if ($numberOfPostsOwnedByUserWithSameSlug > 1) {
             return true;
         }
 
-        return false;
+        /** @var Post $postOwnedByUserWithSameSlug */
+        $postOwnedByUserWithSameSlug = $postsOwnedByUserWithSameSlug[0];
+
+        if ($postOwnedByUserWithSameSlug->getId() === $currentPost->getId()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -158,7 +172,6 @@ class PostService
 
     /**
      * @param User $user
-     * @param string $title
      * @param Post $post
      * @return Post
      */
@@ -166,7 +179,7 @@ class PostService
     {
         $slug = $this->getSlugify()->slugify($post->getTitle());
 
-        while ($this->userOwnsPostWithSameSlug($user, $slug)) {
+        while ($this->userOwnsPostWithSameSlug($user, $slug, $post)) {
             $slug = $this->incrementSlug($slug);
         }
 

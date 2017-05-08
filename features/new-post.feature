@@ -13,17 +13,17 @@ Feature: New post
     Then I should be redirected to "/writer/untitled/edit"
     And the response status code should be 200
     And I wait for "1" seconds
-    And the system should have recorded that the post "Untitled" was created and updated just now
+    And the system should have recorded that the post "Untitled" was created and updated just now by "writer"
 
     When I click the "New post" link
     Then I should be redirected to "/writer/untitled-2/edit"
     And the response status code should be 200
-    And the system should have recorded that the post with slug "untitled-2" was created and updated just now
+    And the system should have recorded that the post with slug "untitled-2" was created and updated just now by "writer"
 
     When I click the "New post" link
     Then I should be redirected to "/writer/untitled-3/edit"
     And the response status code should be 200
-    And the system should have recorded that the post with slug "untitled-2" was created and updated just now
+    And the system should have recorded that the post with slug "untitled-2" was created and updated just now by "writer"
 
     When I visit "/logout"
     And I visit "/writer/untitled/edit"

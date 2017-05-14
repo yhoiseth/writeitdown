@@ -88,6 +88,8 @@ class DefaultController extends Controller
                 ->setParameter('null', serialize(null));
         }
 
+//        dump($queryBuilder->getQuery());die;
+
         $posts = $queryBuilder
             ->getQuery()
             ->getResult();
@@ -132,7 +134,7 @@ class DefaultController extends Controller
     public function publishPostAction(Request $request, string $username, string $slug)
     {
         $post = $this->getPostBySlugAndOwner($username, $slug);
-        
+
         $this->denyAccessUnlessGranted('edit', $post);
 
         $post->publish();

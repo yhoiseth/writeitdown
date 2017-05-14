@@ -130,9 +130,9 @@ class Post extends BaseEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getPublishedAt(): \DateTime
+    public function getPublishedAt()
     {
         return $this->publishedAt;
     }
@@ -148,6 +148,11 @@ class Post extends BaseEntity
     public function publish()
     {
         $this->setPublishedAt(new \DateTime());
+    }
+
+    public function isPublic(): bool
+    {
+        return $this->getPublishedAt() instanceof \DateTime;
     }
 }
 

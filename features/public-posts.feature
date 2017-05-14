@@ -1,4 +1,3 @@
-@watch
 Feature: Public posts
   In order to share my thoughts with anyone
   As a web user
@@ -15,8 +14,11 @@ Feature: Public posts
     And I visit "/shakespeare"
     Then I should see "No posts yet"
 
+    @watch
   Scenario: Two public posts
     Given I visit "/shakespeare/love/edit"
+    And I fill in "Body" with "1. My first point about love"
+    And I press "Save immediately"
     And I click the "Publish post" link
     And I should be redirected to "/shakespeare/love"
     And I should see "Post published"
@@ -30,7 +32,7 @@ Feature: Public posts
     But I should not see "Ignorance"
 
     When I click the "Love" link
-    Then I should see the contents of the posts
+    Then the "ol li" element should contain "My first point about love"
 
   Scenario: Try to publish other user's post
     Given I am logged in as "hacker"

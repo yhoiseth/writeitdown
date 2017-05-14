@@ -21,15 +21,20 @@
                 </div>
             </div>
         </div>
-        <div class="list-group">
-            {% for post in posts %}
-                <a
-                        href="{{ path('post_edit', {'slug': post.slug, 'username': owner.username}) }}"
-                        class="list-group-item"
-                >
-                    {{ post.title }}
-                </a>
-            {% endfor %}
+        <div class="col-xs-12 col-sm-8 col-md-9 col-lg-9">
+            <h1>
+                Posts
+            </h1>
+            <div class="list-group">
+                {% for post in posts %}
+                    <a
+                            href="{{ path('post_edit', {'slug': post.slug, 'username': owner.username}) }}"
+                            class="list-group-item"
+                    >
+                        {{ post.title }}
+                    </a>
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}

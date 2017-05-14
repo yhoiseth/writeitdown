@@ -801,7 +801,7 @@ class FeatureContext extends MinkContext implements Context
     {
         $this->assertResponseStatus(200);
 
-        throw new PendingException();
+        $this->assertElementOnPage('.glyphicon-user');
     }
 
     /**

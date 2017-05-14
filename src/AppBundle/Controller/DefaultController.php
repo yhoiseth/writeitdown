@@ -63,9 +63,9 @@ class DefaultController extends Controller
      */
     public function profileAction(Request $request, string $username): Response
     {
-        if ($this->getUser()->getUsername() !== $username) {
-            return new Response('', 403);
-        }
+//        if ($this->getUser()->getUsername() !== $username) {
+//            return new Response('', 403);
+//        }
 
         $postRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Post');
         $userManager = $this->get('fos_user.user_manager');

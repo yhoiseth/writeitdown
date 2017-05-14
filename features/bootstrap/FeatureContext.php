@@ -826,4 +826,12 @@ class FeatureContext extends MinkContext implements Context
     {
         $this->assertElementNotOnPage('.glyphicon-user');
     }
+
+    /**
+     * @Then I should see the contents of the posts
+     */
+    public function iShouldSeeTheContentsOfThePosts()
+    {
+        throw new PendingException();
+    }
 }

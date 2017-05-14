@@ -145,6 +145,8 @@ class FeatureContext extends MinkContext implements Context
 
         $entityManager->persist($user);
         $entityManager->flush();
+
+        $this->setScenarioArgument('user', $user);
     }
 
     /**
@@ -782,7 +784,14 @@ class FeatureContext extends MinkContext implements Context
      */
     public function theUserDoesNotHaveAGravatar()
     {
-        throw new PendingException();
+        /** @var User $user */
+        $user = $this->getScenarioArgument('user');
+
+        $email = $user->getEmailCanonical();
+
+        $gravatarService = $this->getContainer()->get('gravatar.api');
+
+        Assert::assertNotTrue($gravatarService->exists($email));
     }
 
     /**
@@ -790,6 +799,8 @@ class FeatureContext extends MinkContext implements Context
      */
     public function iShouldSeeADefaultGravatar()
     {
+        $this->assertResponseStatus(200);
+
         throw new PendingException();
     }
 

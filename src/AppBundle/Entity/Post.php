@@ -45,6 +45,12 @@ class Post extends BaseEntity
      */
     private $slug;
 
+    /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $publishedAt;
+
     public function __construct()
     {
         parent::__construct();
@@ -121,6 +127,27 @@ class Post extends BaseEntity
     public function setSlug(string $slug)
     {
         $this->slug = $slug;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getPublishedAt(): \DateTime
+    {
+        return $this->publishedAt;
+    }
+
+    /**
+     * @param \DateTime $publishedAt
+     */
+    public function setPublishedAt(\DateTime $publishedAt)
+    {
+        $this->publishedAt = $publishedAt;
+    }
+
+    public function publish()
+    {
+        $this->setPublishedAt(new \DateTime());
     }
 }
 

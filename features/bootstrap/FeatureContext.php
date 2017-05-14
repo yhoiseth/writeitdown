@@ -822,11 +822,11 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @Given :arg1 has a private post with title :arg2 and slug :arg3
+     * @Given :username has a private post with title :title and slug :slug
      */
-    public function hasAPrivatePostWithTitleAndSlug($arg1, $arg2, $arg3)
+    public function hasAPrivatePostWithTitleAndSlug($username, $title, $slug)
     {
-        throw new PendingException();
+        $this->iHaveAPostWithTitleAndSlug($title, $slug);
     }
 
     /**

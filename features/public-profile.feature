@@ -10,7 +10,6 @@ Feature: Public profile
     Then I should see a default gravatar
     And I should see "radioface"
 
-  @watch
   Scenario: Gravatar exists
     Given a user "yhoiseth"
     And the user has a gravatar
@@ -19,6 +18,7 @@ Feature: Public profile
     And I should not see a default gravatar
     And I should see "yhoiseth"
 
+  @watch
   Scenario: Private post
     Given a user "edward"
     And "edward" has a private post with title "Edward's private post" and slug "private"

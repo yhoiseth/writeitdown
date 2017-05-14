@@ -22,8 +22,8 @@ Feature: List own posts
     When I click the "Fourth" link
     Then I should be redirected to "/listlover/fourth/edit"
 
-  Scenario: Other user's posts
+  Scenario: Other user's profile
     Given a user "other"
     And I am logged in as "other"
     And I am on "/listlover"
-    Then the response status code should be 403
+    Then the response status code should be 200

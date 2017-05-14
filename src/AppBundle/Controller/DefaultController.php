@@ -70,11 +70,13 @@ class DefaultController extends Controller
         $postRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Post');
         $userManager = $this->get('fos_user.user_manager');
 
+        $owner = $userManager->findUserByUsername($username);
+
         $posts = $postRepository->createQueryBuilder('post')
             ->join('post.roles', 'role')
             ->where('role.user = :owner')
             ->andWhere('role.type = :roleType')
-            ->setParameter('owner', $userManager->findUserByUsername($username))
+            ->setParameter('owner', $owner)
             ->setParameter('roleType', PostRole::TYPE_OWNER)
             ->getQuery()
             ->getResult()
@@ -82,7 +84,7 @@ class DefaultController extends Controller
 
         return $this->render('AppBundle:Profile:show.html.twig', [
             'posts' => $posts,
-            'username' => $username,
+            'owner' => $owner,
         ]);
     }
 

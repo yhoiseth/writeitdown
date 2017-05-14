@@ -138,7 +138,7 @@ class FeatureContext extends MinkContext implements Context
         $user = $userManager->createUser();
         $user->setUsername($username);
         $user->setPlainPassword($username);
-        $user->setEmail($username . '@example.com');
+        $user->setEmail($username . '@gmail.com');
         $user->setEnabled(true);
 
         $entityManager = $this->getEntityManager();
@@ -768,7 +768,11 @@ class FeatureContext extends MinkContext implements Context
      */
     public function theUserHasAGravatar()
     {
-        throw new PendingException();
+        $gravatarService = $this->getContainer()->get('gravatar.api');
+
+        /** @var User $user */
+        $user = $this->getScenarioArgument('user');
+        Assert::assertTrue($gravatarService->exists($user->getEmailCanonical()));
     }
 
     /**
@@ -776,7 +780,20 @@ class FeatureContext extends MinkContext implements Context
      */
     public function iShouldSeeTheGravatar()
     {
-        throw new PendingException();
+        $gravatarService = $this->getContainer()->get('gravatar.api');
+
+        /** @var User $user */
+        $user = $this->getScenarioArgument('user');
+
+        $url = $gravatarService->getUrl(
+            $user->getEmailCanonical(),
+            null,
+            null,
+            null,
+            true
+        );
+
+        $this->assertElementOnPage("img[src*='$url']");
     }
 
     /**
@@ -810,5 +827,13 @@ class FeatureContext extends MinkContext implements Context
     public function hasAPrivatePostWithTitleAndSlug($arg1, $arg2, $arg3)
     {
         throw new PendingException();
+    }
+
+    /**
+     * @Then I should not see a default gravatar
+     */
+    public function iShouldNotSeeADefaultGravatar()
+    {
+        $this->assertElementNotOnPage('.glyphicon-user');
     }
 }

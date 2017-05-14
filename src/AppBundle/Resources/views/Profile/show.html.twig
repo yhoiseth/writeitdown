@@ -1,11 +1,15 @@
 {% extends 'FOSUserBundle::layout.html.twig' %}
 
 {% block title %}
-    {{ username }} {{ parent() }}
+    {{ owner.username }} {{ parent() }}
 {% endblock %}
 
 {% block body %}
-    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+    {% if gravatar_exists(owner.emailCanonical) %}
+        <img src="{{ gravatar(owner.emailCanonical, null, null, null, true) }}" />
+    {% else %}
+        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+    {% endif %}
     <div class="list-group">
         {% for post in posts %}
                 <a

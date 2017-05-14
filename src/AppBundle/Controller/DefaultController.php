@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
 use AppBundle\Form\Post\SlugType;
+use AppBundle\Repository\PostRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Stringy\Stringy;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -63,10 +64,15 @@ class DefaultController extends Controller
      */
     public function profileAction(Request $request, string $username): Response
     {
+        /** @var PostRepository $postRepository */
         $postRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Post');
         $userManager = $this->get('fos_user.user_manager');
 
         $owner = $userManager->findUserByUsername($username);
+
+        if (!$owner) {
+            throw $this->createNotFoundException('User not found');
+        }
 
         if ($this->getUser() === $owner) {
             $posts = $postRepository->createQueryBuilder('post')

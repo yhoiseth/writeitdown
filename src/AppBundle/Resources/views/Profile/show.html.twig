@@ -6,20 +6,16 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
             <div class="row">
-                <div class="col-xs-5">
-                    {% if gravatar_exists(owner.emailCanonical) %}
-                        <img src="{{ gravatar(owner.emailCanonical, null, null, null, true) }}" />
-                    {% else %}
-                        <img
-                                src="{{ asset('assets/images/icon-user.png') }}"
-                                class="img-responsive"
-                        >
-                    {% endif %}
+                <div class="col-xs-5 col-sm-12">
+                    <img
+                            src="{{ gravatar(owner.emailCanonical, 300, null, 'mm', true) }}"
+                            class="img-responsive img-rounded"
+                    >
                 </div>
-                <div class="col-xs-7">
-                    <h1>
+                <div class="col-xs-7 col-sm-12">
+                    <h1 style="font-size: 2em">
                         {{ owner.username }}
                     </h1>
                 </div>

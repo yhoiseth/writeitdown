@@ -3,12 +3,11 @@ Feature: Public profile
   As a web visitor
   I need to be able to view users' public profiles
 
-  @watch
-  Scenario: Gravatar does not exist
+  Scenario: Default gravatar
     Given a user "radioface"
     And the user does not have a gravatar
     When I visit "/radioface"
-    Then I should see a default gravatar
+    Then I should see the gravatar
     And I should see "radioface"
 
   Scenario: Gravatar exists
@@ -16,7 +15,6 @@ Feature: Public profile
     And the user has a gravatar
     When I visit "/yhoiseth"
     Then I should see the gravatar
-    And I should not see a default gravatar
     And I should see "yhoiseth"
 
   Scenario: Private post

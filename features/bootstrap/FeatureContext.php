@@ -787,9 +787,9 @@ class FeatureContext extends MinkContext implements Context
 
         $url = $gravatarService->getUrl(
             $user->getEmailCanonical(),
+            300,
             null,
-            null,
-            null,
+            'mm',
             true
         );
 

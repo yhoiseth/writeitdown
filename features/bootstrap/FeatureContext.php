@@ -138,13 +138,15 @@ class FeatureContext extends MinkContext implements Context
         $user = $userManager->createUser();
         $user->setUsername($username);
         $user->setPlainPassword($username);
-        $user->setEmail($username . '@example.com');
+        $user->setEmail($username . '@gmail.com');
         $user->setEnabled(true);
 
         $entityManager = $this->getEntityManager();
 
         $entityManager->persist($user);
         $entityManager->flush();
+
+        $this->setScenarioArgument('user', $user);
     }
 
     /**
@@ -759,5 +761,69 @@ class FeatureContext extends MinkContext implements Context
         ]);
 
         return $post;
+    }
+
+    /**
+     * @Given the user has a gravatar
+     */
+    public function theUserHasAGravatar()
+    {
+        $gravatarService = $this->getContainer()->get('gravatar.api');
+
+        /** @var User $user */
+        $user = $this->getScenarioArgument('user');
+        Assert::assertTrue($gravatarService->exists($user->getEmailCanonical()));
+    }
+
+    /**
+     * @Then I should see the gravatar
+     */
+    public function iShouldSeeTheGravatar()
+    {
+        $gravatarService = $this->getContainer()->get('gravatar.api');
+
+        /** @var User $user */
+        $user = $this->getScenarioArgument('user');
+
+        $url = $gravatarService->getUrl(
+            $user->getEmailCanonical(),
+            300,
+            null,
+            'mm',
+            true
+        );
+
+        $this->assertElementOnPage("img[src*='$url']");
+    }
+
+    /**
+     * @Given the user does not have a gravatar
+     */
+    public function theUserDoesNotHaveAGravatar()
+    {
+        /** @var User $user */
+        $user = $this->getScenarioArgument('user');
+
+        $email = $user->getEmailCanonical();
+
+        $gravatarService = $this->getContainer()->get('gravatar.api');
+
+        Assert::assertNotTrue($gravatarService->exists($email));
+    }
+
+    /**
+     * @Given :username has a private post with title :title and slug :slug
+     */
+    public function hasAPrivatePostWithTitleAndSlug($username, $title, $slug)
+    {
+        $this->iHaveAPostWithTitleAndSlug($title, $slug);
+    }
+
+    /**
+     * @Then I should not see a default gravatar
+     */
+    public function iShouldNotSeeADefaultGravatar()
+    {
+        $this->assertElementNotOnPage('.glyphicon-user');
     }
 }

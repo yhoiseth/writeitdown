@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
 use AppBundle\Form\Post\SlugType;
+use AppBundle\Repository\PostRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Stringy\Stringy;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -63,26 +64,32 @@ class DefaultController extends Controller
      */
     public function profileAction(Request $request, string $username): Response
     {
-        if ($this->getUser()->getUsername() !== $username) {
-            return new Response('', 403);
-        }
-
+        /** @var PostRepository $postRepository */
         $postRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Post');
         $userManager = $this->get('fos_user.user_manager');
 
-        $posts = $postRepository->createQueryBuilder('post')
-            ->join('post.roles', 'role')
-            ->where('role.user = :owner')
-            ->andWhere('role.type = :roleType')
-            ->setParameter('owner', $userManager->findUserByUsername($username))
-            ->setParameter('roleType', PostRole::TYPE_OWNER)
-            ->getQuery()
-            ->getResult()
-        ;
+        $owner = $userManager->findUserByUsername($username);
+
+        if (!$owner) {
+            throw $this->createNotFoundException('User not found');
+        }
+
+        if ($this->getUser() === $owner) {
+            $posts = $postRepository->createQueryBuilder('post')
+                ->join('post.roles', 'role')
+                ->where('role.user = :owner')
+                ->andWhere('role.type = :roleType')
+                ->setParameter('owner', $owner)
+                ->setParameter('roleType', PostRole::TYPE_OWNER)
+                ->getQuery()
+                ->getResult();
+        } else {
+            $posts = [];
+        }
 
         return $this->render('AppBundle:Profile:show.html.twig', [
             'posts' => $posts,
-            'username' => $username,
+            'owner' => $owner,
         ]);
     }
 

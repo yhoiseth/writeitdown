@@ -760,4 +760,44 @@ class FeatureContext extends MinkContext implements Context
 
         return $post;
     }
+
+    /**
+     * @Given the user has a gravatar
+     */
+    public function theUserHasAGravatar()
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then I should see the gravatar
+     */
+    public function iShouldSeeTheGravatar()
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Given the user does not have a gravatar
+     */
+    public function theUserDoesNotHaveAGravatar()
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then I should see a default gravatar
+     */
+    public function iShouldSeeADefaultGravatar()
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Given :arg1 has a private post with title :arg2 and slug :arg3
+     */
+    public function hasAPrivatePostWithTitleAndSlug($arg1, $arg2, $arg3)
+    {
+        throw new PendingException();
+    }
 }

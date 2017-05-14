@@ -818,12 +818,4 @@ class FeatureContext extends MinkContext implements Context
     {
         $this->iHaveAPostWithTitleAndSlug($title, $slug);
     }
-
-    /**
-     * @Then I should not see a default gravatar
-     */
-    public function iShouldNotSeeADefaultGravatar()
-    {
-        $this->assertElementNotOnPage('.glyphicon-user');
-    }
 }

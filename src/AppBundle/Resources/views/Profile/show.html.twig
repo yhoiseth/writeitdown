@@ -5,19 +5,35 @@
 {% endblock %}
 
 {% block body %}
-    {% if gravatar_exists(owner.emailCanonical) %}
-        <img src="{{ gravatar(owner.emailCanonical, null, null, null, true) }}" />
-    {% else %}
-        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-    {% endif %}
-    <div class="list-group">
-        {% for post in posts %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-xs-5">
+                    {% if gravatar_exists(owner.emailCanonical) %}
+                        <img src="{{ gravatar(owner.emailCanonical, null, null, null, true) }}" />
+                    {% else %}
+                        <img
+                                src="{{ asset('assets/images/icon-user.png') }}"
+                                class="img-responsive"
+                        >
+                    {% endif %}
+                </div>
+                <div class="col-xs-7">
+                    <h1>
+                        {{ owner.username }}
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="list-group">
+            {% for post in posts %}
                 <a
                         href="{{ path('post_edit', {'slug': post.slug, 'username': owner.username}) }}"
                         class="list-group-item"
                 >
                     {{ post.title }}
                 </a>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

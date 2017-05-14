@@ -818,7 +818,7 @@ class FeatureContext extends MinkContext implements Context
     {
         $this->assertResponseStatus(200);
 
-        $this->assertElementOnPage('.glyphicon-user');
+        $this->assertElementOnPage('img[src*="/assets/images/icon-user.png"]');
     }
 
     /**

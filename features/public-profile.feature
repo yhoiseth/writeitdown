@@ -3,6 +3,7 @@ Feature: Public profile
   As a web visitor
   I need to be able to view users' public profiles
 
+  @watch
   Scenario: Gravatar does not exist
     Given a user "radioface"
     And the user does not have a gravatar
@@ -18,7 +19,6 @@ Feature: Public profile
     And I should not see a default gravatar
     And I should see "yhoiseth"
 
-  @watch
   Scenario: Private post
     Given a user "edward"
     And "edward" has a private post with title "Edward's private post" and slug "private"

@@ -812,16 +812,6 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @Then I should see a default gravatar
-     */
-    public function iShouldSeeADefaultGravatar()
-    {
-        $this->assertResponseStatus(200);
-
-        $this->assertElementOnPage('img[src*="/assets/images/icon-user.png"]');
-    }
-
-    /**
      * @Given :username has a private post with title :title and slug :slug
      */
     public function hasAPrivatePostWithTitleAndSlug($username, $title, $slug)

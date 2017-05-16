@@ -818,4 +818,12 @@ class FeatureContext extends MinkContext implements Context
     {
         $this->iHaveAPostWithTitleAndSlug($title, $slug);
     }
+
+    /**
+     * @Then :titleOfMostRecentPost should be before :titleOfLeastRecentPost
+     */
+    public function shouldBeBefore(string $titleOfMostRecentPost, string $titleOfLeastRecentPost)
+    {
+        $this->assertElementContainsText('.list-group a', $titleOfMostRecentPost);
+    }
 }

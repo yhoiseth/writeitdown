@@ -23,12 +23,14 @@ Feature: Public posts
     And I should be redirected to "/shakespeare/love"
     And I should see "Post published"
     And I visit "/shakespeare/hate/edit"
+    And I wait for "1" seconds
     And I click the "Publish post" link
 
     When I click the "Logout" link
     And I visit "/shakespeare"
     Then I should see "Love"
     And I should see "Hate"
+    And "Hate" should be before "Love"
     But I should not see "Ignorance"
 
     When I click the "Love" link

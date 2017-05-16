@@ -80,15 +80,16 @@ class DefaultController extends Controller
             ->where('role.user = :owner')
             ->andWhere('role.type = :roleType')
             ->setParameter('owner', $owner)
-            ->setParameter('roleType', PostRole::TYPE_OWNER);
+            ->setParameter('roleType', PostRole::TYPE_OWNER)
+        ;
 
         if ($this->getUser() !== $owner) {
             $queryBuilder
                 ->andWhere('post.publishedAt != :null')
-                ->setParameter('null', serialize(null));
+                ->setParameter('null', serialize(null))
+                ->orderBy('post.publishedAt', 'DESC')
+            ;
         }
-
-//        dump($queryBuilder->getQuery());die;
 
         $posts = $queryBuilder
             ->getQuery()

@@ -1,3 +1,4 @@
+@watch
 Feature: Show post
   In order to read comfortably and share my thoughts
   As a logged-in web user
@@ -8,7 +9,6 @@ Feature: Show post
     And a user "alice"
     And I am logged in as "bob"
 
-  @watch
   Scenario: Post exists
     Given that "bob" has a post with title "Bob's post"
     And the post has body "# Heading 1"
@@ -30,7 +30,6 @@ Feature: Show post
     And I am on "/alice/post"
     Then I should see "Written by Alice"
 
-    @watch
   Scenario: Post contains script
     Given that "bob" has a post with title "Bob's post"
     And the post has body "<script>document.getElementByTagName('body').innerHtml = 'Added with script'</script>"

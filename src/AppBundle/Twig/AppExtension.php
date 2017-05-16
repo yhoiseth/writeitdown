@@ -24,29 +24,31 @@ class AppExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFilter(
-                'incrementHeadings',
-                [$this, 'incrementHeadings']
+                'html_headings_increment',
+                [$this, 'incrementHtmlHeadings']
             ),
             new \Twig_SimpleFilter(
                 'html_purify',
                 [$this, 'purify'],
-                ['is_safe' => ['html']]
+                [
+                    'is_safe' => [
+                        'html'
+                    ]
+                ]
             ),
         ];
     }
 
-    public function incrementHeadings(string $markdown): string
+    public function incrementHtmlHeadings(string $text): string
     {
-        dump($markdown);
-
         $stringy = $this->getStringy();
 
-        $stringyHtml = $stringy::create($markdown);
+        $text = $stringy::create($text);
 
-        $stringyHtml = $stringyHtml->replace('<h1', '<h2');
-        $stringyHtml = $stringyHtml->replace('</h1', '</h2');
+        $text = $text->replace('<h1', '<h2');
+        $text = $text->replace('</h1', '</h2');
 
-        return $stringyHtml;
+        return $text;
     }
 
     public function purify($text)
@@ -74,6 +76,7 @@ class AppExtension extends \Twig_Extension
         $config->set('HTML.Allowed', implode(',', $elements));
 
         $purifier = new \HTMLPurifier($config);
+
         return $purifier->purify($text);
     }
 

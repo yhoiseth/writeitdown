@@ -5,5 +5,18 @@
 {% endblock %}
 
 {% block body %}
+    <h1>
+        {{ post.title }}
+        <small>
+            <a
+                    href="{{ path('post_edit', {
+                        'username': username,
+                        'slug': post.slug
+                    }) }}"
+            >
+                Edit
+            </a>
+        </small>
+    </h1>
     {{ post.body|markdown }}
 {% endblock %}

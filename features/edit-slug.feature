@@ -10,6 +10,7 @@ Feature: Edit slug
     Given I have a post with title "Untitled" and slug "untitled"
     And I visit "/"
     And I click the "Untitled" link
+    And I click the "Edit" link
     And I click the "Edit slug" link
     And I should be redirected to "/slugger/untitled/slug/edit"
     And I fill in "Slug" with "popular-slug"
@@ -23,6 +24,7 @@ Feature: Edit slug
     And I have a post with title "Other slugger post" and slug "other-slugger-post"
     And I visit "/"
     And I click the "Untitled" link
+    And I click the "Edit" link
     And I click the "Edit slug" link
     Then I should be redirected to "/slugger/untitled/slug/edit"
     When I fill in "Slug" with "other-slugger-post"
@@ -39,6 +41,7 @@ Feature: Edit slug
     Given I have a post with title "Untitled" and slug "untitled"
     And I visit "/"
     And I click the "Untitled" link
+    And I click the "Edit" link
     And I click the "Edit slug" link
     And I should be redirected to "/slugger/untitled/slug/edit"
     And I fill in "Slug" with "<input>"

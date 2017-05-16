@@ -20,6 +20,14 @@
             </small>
         {% endif %}
     </h1>
+    {{
+        post.body
+            |markdown
+            |html_headings_increment
+            |html_purify
+    }}
     {{ post.body|markdown|html_headings_increment|html_purify }}
+    {{ post.body|markdown|html_headings_increment }}
+    {{ post.body|markdown }}
     {{ post.body }}
 {% endblock %}

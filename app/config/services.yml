@@ -23,9 +23,6 @@ services:
         tags:
             - { name: validator.constraint_validator }
 
-    stringy:
-        class: Stringy\Stringy
-
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
         arguments:
@@ -33,3 +30,6 @@ services:
         public: false
         tags:
             - { name: twig.extension }
+
+    stringy:
+        class: Stringy\Stringy

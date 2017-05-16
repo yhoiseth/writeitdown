@@ -41,20 +41,15 @@ class AppExtension extends \Twig_Extension
 
     public function incrementHtmlHeadings(string $text): string
     {
-//        $stringy = $this->getStringy();
-//
-//        $text = $stringy::create($text);
-//
-//        $text
-//            ->replace('<h1', '<h2')
-//            ->replace('</h1', '</h2')
-//        ;
-//        $text = $text->replace('</h1', '</h2');
-//
-//        return $text->__toString();
+        $stringy = $this->getStringy();
 
-        $text = mb_ereg_replace('<h1', '<h2', $text);
-        $text = mb_ereg_replace('</h1', '</h2', $text);
+        $text = $stringy::create($text);
+
+        $text = $text->replace('<h1', '<h2');
+        $text = $text->replace('</h1', '</h2');
+
+//        $text = mb_ereg_replace('<h1', '<h2', $text);
+//        $text = mb_ereg_replace('</h1', '</h2', $text);
 
         return $text;
     }

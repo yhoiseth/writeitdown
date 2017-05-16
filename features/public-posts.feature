@@ -34,6 +34,7 @@ Feature: Public posts
 
     When I click the "Love" link
     Then the "ol li" element should contain "My first point about love"
+    And I should not see "Edit"
 
   Scenario: Try to publish other user's post
     Given I am logged in as "hacker"

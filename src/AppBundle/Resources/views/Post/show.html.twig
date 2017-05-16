@@ -5,5 +5,25 @@
 {% endblock %}
 
 {% block body %}
-    {{ post.body|markdown }}
+    <h1>
+        {{ post.title }}
+        {% if is_granted('edit', post) %}
+            <small>
+                <a
+                        href="{{ path('post_edit', {
+                            'username': username,
+                            'slug': post.slug
+                        }) }}"
+                >
+                    Edit
+                </a>
+            </small>
+        {% endif %}
+    </h1>
+    {{
+        post.body
+            |markdown
+            |html_headings_increment
+            |html_purify
+    }}
 {% endblock %}

@@ -28,11 +28,15 @@
             <div class="list-group">
                 {% for post in posts %}
                     <a
-                            href="{{ path('post_edit', {'slug': post.slug, 'username': owner.username}) }}"
+                            href="{{ path('post_show', {'slug': post.slug, 'username': owner.username}) }}"
                             class="list-group-item"
                     >
                         {{ post.title }}
                     </a>
+                {% else %}
+                    <p>
+                        No posts yet.
+                    </p>
                 {% endfor %}
             </div>
         </div>

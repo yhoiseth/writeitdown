@@ -1,3 +1,4 @@
+@watch
 Feature: Show post
   In order to read comfortably and share my thoughts
   As a logged-in web user
@@ -28,3 +29,9 @@ Feature: Show post
     When I am logged in as "alice"
     And I am on "/alice/post"
     Then I should see "Written by Alice"
+
+  Scenario: Post contains script
+    Given that "bob" has a post with title "Bob's post"
+    And the post has body "<script>document.getElementByTagName('body').innerHtml = 'Added with script'</script>"
+    And I am viewing the given post
+    Then I should not see "Added with script"

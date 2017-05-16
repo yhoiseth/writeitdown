@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Stringy\Stringy;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Post;
@@ -74,18 +75,25 @@ class DefaultController extends Controller
             throw $this->createNotFoundException('User not found');
         }
 
-        if ($this->getUser() === $owner) {
-            $posts = $postRepository->createQueryBuilder('post')
-                ->join('post.roles', 'role')
-                ->where('role.user = :owner')
-                ->andWhere('role.type = :roleType')
-                ->setParameter('owner', $owner)
-                ->setParameter('roleType', PostRole::TYPE_OWNER)
-                ->getQuery()
-                ->getResult();
-        } else {
-            $posts = [];
+        $queryBuilder = $postRepository->createQueryBuilder('post')
+            ->join('post.roles', 'role')
+            ->where('role.user = :owner')
+            ->andWhere('role.type = :roleType')
+            ->setParameter('owner', $owner)
+            ->setParameter('roleType', PostRole::TYPE_OWNER)
+        ;
+
+        if ($this->getUser() !== $owner) {
+            $queryBuilder
+                ->andWhere('post.publishedAt != :null')
+                ->setParameter('null', serialize(null))
+                ->orderBy('post.publishedAt', 'DESC')
+            ;
         }
+
+        $posts = $queryBuilder
+            ->getQuery()
+            ->getResult();
 
         return $this->render('AppBundle:Profile:show.html.twig', [
             'posts' => $posts,
@@ -114,6 +122,35 @@ class DefaultController extends Controller
             'form' => $form->createView(),
             'username' => $username,
             'post' => $post,
+        ]);
+    }
+
+    /**
+     * @Route("/{username}/{slug}/publish", name="post_publish")
+     * @param Request $request
+     * @param string $username
+     * @param string $slug
+     * @return RedirectResponse
+     */
+    public function publishPostAction(Request $request, string $username, string $slug)
+    {
+        $post = $this->getPostBySlugAndOwner($username, $slug);
+
+        $this->denyAccessUnlessGranted('edit', $post);
+
+        $post->publish();
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $entityManager->persist($post);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Post published');
+
+        return $this->redirectToRoute(
+            'post_show', [
+                'username' => $username,
+                'slug' => $slug,
         ]);
     }
 

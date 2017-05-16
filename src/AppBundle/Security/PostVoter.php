@@ -54,6 +54,13 @@ class PostVoter extends Voter
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
+        /** @var Post $post */
+        $post = $subject;
+
+        if ($attribute === self::SHOW && $post->isPublic()) {
+            return true;
+        }
+
         $user = $token->getUser();
 
         if (!$user instanceof $user) {
@@ -63,9 +70,6 @@ class PostVoter extends Voter
         if ($attribute === self::NEW) {
             return true;
         }
-
-        /** @var Post $post */
-        $post = $subject;
 
         $roles = $post->getRoles();
 

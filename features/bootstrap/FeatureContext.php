@@ -336,7 +336,7 @@ class FeatureContext extends MinkContext implements Context
     public function iShouldSeeTheContentCorrectlyFormattedAsHtml()
     {
         $this->assertResponseStatus(200);
-        $this->assertElementContainsText('h1', 'Heading 1');
+        $this->assertElementContainsText('h2', 'Heading 1');
     }
 
     /**
@@ -820,10 +820,10 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @Then I should not see a default gravatar
+     * @Then :titleOfMostRecentPost should be before :titleOfLeastRecentPost
      */
-    public function iShouldNotSeeADefaultGravatar()
+    public function shouldBeBefore(string $titleOfMostRecentPost, string $titleOfLeastRecentPost)
     {
-        $this->assertElementNotOnPage('.glyphicon-user');
+        $this->assertElementContainsText('.list-group a', $titleOfMostRecentPost);
     }
 }

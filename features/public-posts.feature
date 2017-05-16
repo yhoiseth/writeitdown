@@ -14,7 +14,6 @@ Feature: Public posts
     And I visit "/shakespeare"
     Then I should see "No posts yet"
 
-    @watch
   Scenario: Two public posts
     Given I visit "/shakespeare/love/edit"
     And I fill in "Body" with "1. My first point about love"

@@ -48,9 +48,6 @@ class AppExtension extends \Twig_Extension
         $text = $text->replace('<h1', '<h2');
         $text = $text->replace('</h1', '</h2');
 
-//        $text = mb_ereg_replace('<h1', '<h2', $text);
-//        $text = mb_ereg_replace('</h1', '</h2', $text);
-
         return $text;
     }
 

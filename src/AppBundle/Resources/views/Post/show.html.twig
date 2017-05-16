@@ -20,5 +20,10 @@
             </small>
         {% endif %}
     </h1>
-    {{ post.body|markdown }}
+    {{
+        post.body
+            |markdown
+            |incrementHeadings
+            |html_purify
+    }}
 {% endblock %}

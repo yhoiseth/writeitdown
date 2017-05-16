@@ -22,3 +22,14 @@ services:
             - "@service_container"
         tags:
             - { name: validator.constraint_validator }
+
+    app.stringy:
+        class: Stringy\Stringy
+
+    app.twig_extension:
+        class: AppBundle\Twig\AppExtension
+        arguments:
+            - '@app.stringy'
+        public: false
+        tags:
+            - { name: twig.extension }

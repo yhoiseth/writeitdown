@@ -26,9 +26,14 @@
             |html_headings_increment
             |html_purify
     }}
+    post.body|markdown|html_headings_increment|html_purify
     {{ post.body|markdown|html_headings_increment|html_purify }}
-    {{ post.body|markdown|html_headings_increment|html_purify }}
+    post.body|markdown|html_purify
+    {{ post.body|markdown|html_purify }}
+    post.body|markdown|html_headings_increment
     {{ post.body|markdown|html_headings_increment }}
+    post.body|markdown
     {{ post.body|markdown }}
+    post.body
     {{ post.body }}
 {% endblock %}

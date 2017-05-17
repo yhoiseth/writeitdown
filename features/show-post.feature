@@ -8,16 +8,8 @@ Feature: Show post
     And a user "alice"
     And I am logged in as "bob"
 
-#  Scenario: Post exists
-#    Given that "bob" has a post with title "Bob's post"
-#    And the post has body "# Heading 1"
-#    And I am viewing the given post
-#    Then I should see the content correctly formatted as HTML
-
-  @watch
   Scenario: Post exists
     Given that "bob" has a post with title "Bob's post"
-#    And the post has body "# Heading 1"
     And the post has body:
     """
     # Heading 1
@@ -52,6 +44,9 @@ Feature: Show post
 
   Scenario: Post contains script
     Given that "bob" has a post with title "Bob's post"
-    And the post has body "<script>document.getElementByTagName('body').innerHtml = 'Added with script'</script>"
+    And the post has body:
+    """
+    <script>document.getElementByTagName('body').innerHtml = 'Added with script'</script>
+    """
     And I am viewing the given post
     Then I should not see "Added with script"

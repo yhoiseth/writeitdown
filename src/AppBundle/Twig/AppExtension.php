@@ -43,46 +43,18 @@ class AppExtension extends \Twig_Extension
     {
         $stringy = $this->getStringy();
 
+        /** @var Stringy $text */
         $text = $stringy::create($text);
 
-        dump($text);
-//
-//        for (
-////            $currentLevel = 1;
-////            $currentLevel < 7;
-////            $currentLevel++
-//            $currentLevel = 5;
-//            $currentLevel > 0;
-//            $currentLevel--
-//        ) {
-//            $nextLevel = $currentLevel + 1;
-//            $text = $text->replace("<h$currentLevel", "<h$nextLevel");
-//            $text = $text->replace("</h$currentLevel", "</h$nextLevel");
-//        }
-
-        /** @var Stringy $text */
-        $text = $text->replace("<h5", "<h6");
-        $text = $text->replace("</h5", "</h6");
-
-        $text = $text->replace("<h4", "<h5");
-        $text = $text->replace("</h4", "</h5");
-
-        $text = $text->replace("<h3", "<h4");
-        $text = $text->replace("</h3", "</h4");
-
-        $text = $text->replace("<h2", "<h3");
-        $text = $text->replace("</h2", "</h3");
-
-        $text = $text->replace("<h1", "<h2");
-        $text = $text->replace("</h1", "</h6");
-
-
-        dump($text);
-
-//        die;
-
-//        $text = $text->replace('<h1', '<h2');
-//        $text = $text->replace('</h1', '</h2');
+        for (
+            $currentLevel = 5;
+            $currentLevel > 0;
+            $currentLevel--
+        ) {
+            $nextLevel = $currentLevel + 1;
+            $text = $text->replace("<h$currentLevel", "<h$nextLevel");
+            $text = $text->replace("</h$currentLevel", "</h$nextLevel");
+        }
 
         return $text->__toString();
     }

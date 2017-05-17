@@ -9,6 +9,7 @@ use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Element\NodeElement;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 use PHPUnit\Framework\Assert;
@@ -357,8 +358,19 @@ class FeatureContext extends MinkContext implements Context
         $this->assertElementContainsText('h3', 'Heading 2');
         $this->assertElementContainsText('h4', 'Heading 3');
         $this->assertElementContainsText('h5', 'Heading 4');
-        $this->assertElementContainsText('h6', 'Heading 5');
-        $this->assertElementContainsText('h6', 'Heading 6');
+
+        /** @var NodeElement[] $bottomLevelHeadings */
+        $bottomLevelHeadings = $this->getSession()->getPage()->findAll('css', 'h6');
+
+        foreach ($bottomLevelHeadings as $heading) {
+            Assert::assertContains(
+                $heading->getHtml(),
+                [
+                    'Heading 5',
+                    'Heading 6',
+                ]
+            );
+        }
     }
 
     /**

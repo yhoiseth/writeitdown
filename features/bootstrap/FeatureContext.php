@@ -860,4 +860,20 @@ class FeatureContext extends MinkContext implements Context
     {
         $this->assertElementContainsText('.list-group a', $titleOfMostRecentPost);
     }
+
+    /**
+     * @Given we have loaded the sample data
+     */
+    public function weHaveLoadedTheSampleData()
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then I should see :arg1 posts
+     */
+    public function iShouldSeePosts($arg1)
+    {
+        throw new PendingException();
+    }
 }

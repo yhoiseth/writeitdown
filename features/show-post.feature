@@ -1,4 +1,3 @@
-@watch
 Feature: Show post
   In order to read comfortably and share my thoughts
   As a logged-in web user
@@ -9,9 +8,30 @@ Feature: Show post
     And a user "alice"
     And I am logged in as "bob"
 
+#  Scenario: Post exists
+#    Given that "bob" has a post with title "Bob's post"
+#    And the post has body "# Heading 1"
+#    And I am viewing the given post
+#    Then I should see the content correctly formatted as HTML
+
+  @watch
   Scenario: Post exists
     Given that "bob" has a post with title "Bob's post"
-    And the post has body "# Heading 1"
+#    And the post has body "# Heading 1"
+    And the post has body:
+    """
+    # Heading 1
+
+    ## Heading 2
+
+    ### Heading 3
+
+    #### Heading 4
+
+    ##### Heading 5
+
+    ###### Heading 6
+    """
     And I am viewing the given post
     Then I should see the content correctly formatted as HTML
 

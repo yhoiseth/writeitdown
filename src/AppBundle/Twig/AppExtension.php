@@ -45,10 +45,46 @@ class AppExtension extends \Twig_Extension
 
         $text = $stringy::create($text);
 
-        $text = $text->replace('<h1', '<h2');
-        $text = $text->replace('</h1', '</h2');
+        dump($text);
+//
+//        for (
+////            $currentLevel = 1;
+////            $currentLevel < 7;
+////            $currentLevel++
+//            $currentLevel = 5;
+//            $currentLevel > 0;
+//            $currentLevel--
+//        ) {
+//            $nextLevel = $currentLevel + 1;
+//            $text = $text->replace("<h$currentLevel", "<h$nextLevel");
+//            $text = $text->replace("</h$currentLevel", "</h$nextLevel");
+//        }
 
-        return $text;
+        /** @var Stringy $text */
+        $text = $text->replace("<h5", "<h6");
+        $text = $text->replace("</h5", "</h6");
+
+        $text = $text->replace("<h4", "<h5");
+        $text = $text->replace("</h4", "</h5");
+
+        $text = $text->replace("<h3", "<h4");
+        $text = $text->replace("</h3", "</h4");
+
+        $text = $text->replace("<h2", "<h3");
+        $text = $text->replace("</h2", "</h3");
+
+        $text = $text->replace("<h1", "<h2");
+        $text = $text->replace("</h1", "</h6");
+
+
+        dump($text);
+
+//        die;
+
+//        $text = $text->replace('<h1', '<h2');
+//        $text = $text->replace('</h1', '</h2');
+
+        return $text->__toString();
     }
 
     public function purify($text)
@@ -63,7 +99,7 @@ class AppExtension extends \Twig_Extension
             'sub', 'sup',
             'ins', 'del',
             'ol', 'ul', 'li',
-            'h1', 'h2', 'h3',
+            'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
             'dl', 'dd', 'dt',
             'pre', 'code', 'samp', 'kbd',
             'q', 'blockquote', 'abbr', 'cite',

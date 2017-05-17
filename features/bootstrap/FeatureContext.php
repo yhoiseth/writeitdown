@@ -214,21 +214,38 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @Given the post has body :body
-     * @param string $body
+     * @Given the post has body:
+     * @param PyStringNode $body
      */
-    public function thePostHasBody(string $body)
+    public function thePostHasBody(PyStringNode $body)
     {
         $entityManager = $this->getEntityManager();
 
         /** @var Post $post */
         $post = $this->getScenarioArgument('post');
-        $post->setBody($body);
+        $post->setBody($body->getRaw());
         $entityManager->persist($post);
         $entityManager->flush();
 
         $this->setScenarioArgument('post', $post);
     }
+
+//    /**
+//     * @Given the post has body :body
+//     * @param string $body
+//     */
+//    public function thePostHasBody(string $body)
+//    {
+//        $entityManager = $this->getEntityManager();
+//
+//        /** @var Post $post */
+//        $post = $this->getScenarioArgument('post');
+//        $post->setBody($body);
+//        $entityManager->persist($post);
+//        $entityManager->flush();
+//
+//        $this->setScenarioArgument('post', $post);
+//    }
 
     /**
      * @Given I am on the edit page for :postTitle
@@ -337,6 +354,11 @@ class FeatureContext extends MinkContext implements Context
     {
         $this->assertResponseStatus(200);
         $this->assertElementContainsText('h2', 'Heading 1');
+        $this->assertElementContainsText('h3', 'Heading 2');
+        $this->assertElementContainsText('h4', 'Heading 3');
+        $this->assertElementContainsText('h5', 'Heading 4');
+        $this->assertElementContainsText('h6', 'Heading 5');
+        $this->assertElementContainsText('h6', 'Heading 6');
     }
 
     /**

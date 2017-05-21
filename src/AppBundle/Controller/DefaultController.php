@@ -205,16 +205,21 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            /** @var User $user */
-            $user = $this->getUser();
+        $postRepository = $this->getDoctrine()->getRepository('AppBundle:Post');
+        $queryBuilder = $postRepository->createQueryBuilder('post')
+            ->andWhere('post.publishedAt != :null')
+            ->setParameter('null', serialize(null))
+            ->orderBy('post.publishedAt', 'DESC')
+        ;
 
-            return $this->redirectToRoute('profile', [
-                'username' => $user->getUsernameCanonical()
-            ]);
-        }
+        $posts = $queryBuilder
+            ->getQuery()
+            ->getResult()
+        ;
 
-        return $this->render('default/index.html.twig');
+        return $this->render('default/index.html.twig', [
+            'posts' => $posts,
+        ]);
     }
 
     /**

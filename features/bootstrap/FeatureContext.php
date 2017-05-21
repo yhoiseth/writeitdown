@@ -889,20 +889,30 @@ class FeatureContext extends MinkContext implements Context
      */
     public function theFollowingPosts(TableNode $table)
     {
-        $posts = $table->getHash();
+        $inputPosts = $table->getHash();
+        $entityManager = $this->getDoctrine()->getManager();
 
-        foreach ($posts as $post) {
-            $user = $this->getUserByUsername($post['username']);
+        foreach ($inputPosts as $inputPost) {
+            $user = $this->getUserByUsername($inputPost['username']);
 
             $post = $this
                 ->getContainer()
                 ->get('app.post_service')
                 ->createPost(
                     $user,
-                    $post['title'],
+                    $inputPost['title'],
                     ''
                 )
             ;
+
+            if ($inputPost['visibility'] === 'public') {
+                $post->publish();
+                $entityManager->persist($post);
+            }
+
+            $entityManager->flush();
         }
+
+
     }
 }

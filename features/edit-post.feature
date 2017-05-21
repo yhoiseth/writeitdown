@@ -17,7 +17,7 @@ Feature: Edit post
     And I fill in "Body" with "Whatever's on my mind"
     And I wait for "13" seconds
     Then the title is updated to "My old post has now been edited"
-    And the system has recorded that the post "My old post has now been edited" was updated after its creation
+    And the system has recorded that the post "My old post has now been edited" was updated after its creation by "writer"
     And I should see "Your changes are saved automatically every 10 seconds"
 
   Scenario: Someone else's post

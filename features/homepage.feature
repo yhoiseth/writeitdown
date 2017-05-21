@@ -5,13 +5,32 @@ Feature: Homepage
   I need to be able to see new posts
 
   Background:
-    Given we have loaded the sample data
+    Given the following users:
+      | username |
+      | eia      |
+      | johansen |
+      | antonsen |
+    And the following posts:
+      | owner | title      | slug       | public |
+      | eia   | Skrukken   | skrukken   | true   |
+      | eia   | Hjernevask | hjernevask | true   |
+      | eia   | Påmfri     | pamfri     | false  |
+      | johansen | Ørret   | orret      | false  |
+      | antonsen | Opera   | opera      | true   |
 
   Scenario: Not logged in
     Given I am on the homepage
-    Then I should see "10" posts
+    Then I should see "3" posts
+    And I should see "Skrukken"
+    And I should see "Hjernevask"
+    And I should see "Opera"
+    And I should see "eia"
+    And I should see "antonsen"
     And I should see "Write it down"
     And I should see "Write and publish with Markdown"
+    But I should not see "Påmfri"
+    And I should not see "Ørret"
+    And I should not see "johansen"
 
   Scenario: Logged in
     Given I am logged in as "john"

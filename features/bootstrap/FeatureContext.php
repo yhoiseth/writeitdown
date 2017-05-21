@@ -862,18 +862,47 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @Given we have loaded the sample data
+     * @Then I should see :count posts
+     * @param string $count
      */
-    public function weHaveLoadedTheSampleData()
+    public function iShouldSeePosts(string $count)
     {
-        throw new PendingException();
+        $this->assertNumElements($count, '.list-group-item');
     }
 
     /**
-     * @Then I should see :arg1 posts
+     * @Given the following users:
+     * @param TableNode $table
      */
-    public function iShouldSeePosts($arg1)
+    public function theFollowingUsers(TableNode $table)
     {
-        throw new PendingException();
+        $users = $table->getHash();
+
+        foreach ($users as $user) {
+            $this->aUser($user['username']);
+        }
+    }
+
+    /**
+     * @Given the following posts:
+     * @param TableNode $table
+     */
+    public function theFollowingPosts(TableNode $table)
+    {
+        $posts = $table->getHash();
+
+        foreach ($posts as $post) {
+            $user = $this->getUserByUsername($post['username']);
+
+            $post = $this
+                ->getContainer()
+                ->get('app.post_service')
+                ->createPost(
+                    $user,
+                    $post['title'],
+                    ''
+                )
+            ;
+        }
     }
 }

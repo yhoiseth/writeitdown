@@ -11,12 +11,12 @@ Feature: Homepage
       | johansen |
       | antonsen |
     And the following posts:
-      | owner | title      | slug       | public |
-      | eia   | Skrukken   | skrukken   | true   |
-      | eia   | Hjernevask | hjernevask | true   |
-      | eia   | Påmfri     | pamfri     | false  |
-      | johansen | Ørret   | orret      | false  |
-      | antonsen | Opera   | opera      | true   |
+      | username | title      | public |
+      | eia   | Skrukken   | true   |
+      | eia   | Hjernevask | true   |
+      | eia   | Påmfri     | false  |
+      | johansen | Ørret   | false  |
+      | antonsen | Opera   | true   |
 
   Scenario: Not logged in
     Given I am on the homepage

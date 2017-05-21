@@ -8,7 +8,7 @@ Feature: Edit slug
 
   Scenario: Other user uses slug
     Given I have a post with title "Untitled" and slug "untitled"
-    And I visit "/"
+    And I visit "/slugger"
     And I click the "Untitled" link
     And I click the "Edit" link
     And I click the "Edit slug" link
@@ -22,7 +22,7 @@ Feature: Edit slug
   Scenario: Colliding slug with own post
     Given I have a post with title "Untitled" and slug "untitled"
     And I have a post with title "Other slugger post" and slug "other-slugger-post"
-    And I visit "/"
+    And I visit "/slugger"
     And I click the "Untitled" link
     And I click the "Edit" link
     And I click the "Edit slug" link
@@ -39,7 +39,7 @@ Feature: Edit slug
 
   Scenario Outline: Invalid characters
     Given I have a post with title "Untitled" and slug "untitled"
-    And I visit "/"
+    And I visit "/slugger"
     And I click the "Untitled" link
     And I click the "Edit" link
     And I click the "Edit slug" link

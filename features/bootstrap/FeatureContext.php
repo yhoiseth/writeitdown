@@ -860,4 +860,59 @@ class FeatureContext extends MinkContext implements Context
     {
         $this->assertElementContainsText('.list-group a', $titleOfMostRecentPost);
     }
+
+    /**
+     * @Then I should see :count posts
+     * @param string $count
+     */
+    public function iShouldSeePosts(string $count)
+    {
+        $this->assertNumElements($count, '.list-group-item');
+    }
+
+    /**
+     * @Given the following users:
+     * @param TableNode $table
+     */
+    public function theFollowingUsers(TableNode $table)
+    {
+        $users = $table->getHash();
+
+        foreach ($users as $user) {
+            $this->aUser($user['username']);
+        }
+    }
+
+    /**
+     * @Given the following posts:
+     * @param TableNode $table
+     */
+    public function theFollowingPosts(TableNode $table)
+    {
+        $inputPosts = $table->getHash();
+        $entityManager = $this->getDoctrine()->getManager();
+
+        foreach ($inputPosts as $inputPost) {
+            $user = $this->getUserByUsername($inputPost['username']);
+
+            $post = $this
+                ->getContainer()
+                ->get('app.post_service')
+                ->createPost(
+                    $user,
+                    $inputPost['title'],
+                    ''
+                )
+            ;
+
+            if ($inputPost['visibility'] === 'public') {
+                $post->publish();
+                $entityManager->persist($post);
+            }
+
+            $entityManager->flush();
+        }
+
+
+    }
 }

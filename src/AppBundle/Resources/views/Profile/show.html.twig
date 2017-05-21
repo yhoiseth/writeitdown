@@ -25,20 +25,7 @@
             <h1>
                 Posts
             </h1>
-            <div class="list-group">
-                {% for post in posts %}
-                    <a
-                            href="{{ path('post_show', {'slug': post.slug, 'username': owner.username}) }}"
-                            class="list-group-item"
-                    >
-                        {{ post.title }}
-                    </a>
-                {% else %}
-                    <p>
-                        No posts yet.
-                    </p>
-                {% endfor %}
-            </div>
+            {% include '@App/Post/list.html.twig' %}
         </div>
     </div>
 {% endblock %}

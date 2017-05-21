@@ -154,5 +154,22 @@ class Post extends BaseEntity
     {
         return $this->getPublishedAt() instanceof \DateTime;
     }
+
+    /**
+     * @return User|null
+     */
+    public function getOwner()
+    {
+        /** @var PostRole[] $roles */
+        $roles = $this->getRoles();
+
+        foreach ($roles as $role) {
+            if ($role->getType() === PostRole::TYPE_OWNER) {
+                return $role->getUser();
+            }
+        }
+
+        return null;
+    }
 }
 

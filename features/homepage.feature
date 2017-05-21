@@ -1,4 +1,3 @@
-@watch
 Feature: Homepage
   In order to be exposed to other people's posts
   As a visitor or logged-in user

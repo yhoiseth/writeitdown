@@ -4,3 +4,4 @@ Feature: register
   I need to ...
 
   Scenario: try register
+    When I am on "/"

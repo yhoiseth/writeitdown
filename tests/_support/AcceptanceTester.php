@@ -20,7 +20,11 @@ class AcceptanceTester extends \Codeception\Actor
 {
     use _generated\AcceptanceTesterActions;
 
-   /**
-    * Define custom actions here
-    */
+    /**
+     * @When I am on :arg1
+     */
+    public function iAmOn($arg1)
+    {
+        throw new \Codeception\Exception\Incomplete("Step `I am on :arg1` is not defined");
+    }
 }

@@ -8,7 +8,7 @@ build:
     tests:
         override:
             -
-                command: codecept run
+                command: vendor/bin/codecept run
 
 checks:
     php:
